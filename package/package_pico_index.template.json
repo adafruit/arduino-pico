@@ -39,6 +39,9 @@
                      "name": "Adafruit STEMMA Friend RP2040"
                   },
                   {
+                     "name": "Adafruit ThinkINK RP2040"
+                  },
+                  {
                      "name": "Adafruit Trinkey RP2040 QT"
                   },
                   {
