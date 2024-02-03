@@ -152,6 +152,8 @@
 -Wl,--wrap=realloc
 -Wl,--wrap=free
 
+-Wl,--wrap=lwip_init
+
 -Wl,--wrap=pbuf_header
 -Wl,--wrap=pbuf_free
 -Wl,--wrap=pbuf_alloc
@@ -207,7 +209,3 @@
 -Wl,--wrap=cyw43_tcpip_link_status
 -Wl,--wrap=cyw43_cb_tcpip_init
 -Wl,--wrap=cyw43_cb_tcpip_deinit
-
--Wl,--wrap=get_rand_64
--Wl,--wrap=get_rand_32
--Wl,--wrap=sleep_until

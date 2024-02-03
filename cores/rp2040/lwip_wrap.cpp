@@ -18,6 +18,7 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <Arduino.h>
 #include <pico/mutex.h>
 #include <lwip/pbuf.h>
 #include <lwip/udp.h>
@@ -26,19 +27,62 @@
 #include <lwip/raw.h>
 #include <lwip/timeouts.h>
 #include <pico/cyw43_arch.h>
+#include <pico/mutex.h>
+#include <sys/lock.h>
+#include "_xoshiro.h"
+
+extern void ethernet_arch_lwip_begin() __attribute__((weak));
+extern void ethernet_arch_lwip_end() __attribute__((weak));
+
+auto_init_recursive_mutex(__lwipMutex); // Only for case with no Ethernet or PicoW, but still doing LWIP (PPP?)
 
 class LWIPMutex {
 public:
     LWIPMutex() {
-        cyw43_arch_lwip_begin();
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W)
+        if (rp2040.isPicoW()) {
+            cyw43_arch_lwip_begin();
+            return;
+        }
+#endif
+        if (ethernet_arch_lwip_begin) {
+            ethernet_arch_lwip_begin();
+        } else {
+            recursive_mutex_enter_blocking(&__lwipMutex);
+        }
     }
 
     ~LWIPMutex() {
-        cyw43_arch_lwip_end();
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W)
+        if (rp2040.isPicoW()) {
+            cyw43_arch_lwip_end();
+            return;
+        }
+#endif
+        if (ethernet_arch_lwip_end) {
+            ethernet_arch_lwip_end();
+        } else {
+            recursive_mutex_exit(&__lwipMutex);
+        }
     }
 };
 
 extern "C" {
+
+    static XoshiroCpp::Xoshiro256PlusPlus *_lwip_rng = nullptr;
+    // Random number generator for LWIP
+    unsigned long __lwip_rand() {
+        return (unsigned long)(*_lwip_rng)();
+    }
+
+    // Avoid calling lwip_init multiple times
+    extern void __real_lwip_init();
+    void __wrap_lwip_init() {
+        if (!_lwip_rng) {
+            _lwip_rng = new XoshiroCpp::Xoshiro256PlusPlus(get_rand_64());
+            __real_lwip_init();
+        }
+    }
 
     extern u8_t __real_pbuf_header(struct pbuf *p, s16_t header_size);
     u8_t __wrap_pbuf_header(struct pbuf *p, s16_t header_size) {

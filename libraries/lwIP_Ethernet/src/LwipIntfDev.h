@@ -40,16 +40,16 @@
 #include <lwip/inet_chksum.h>
 #include <lwip/apps/sntp.h>
 
-//#include <user_interface.h>  // wifi_get_macaddr()
 
 #include "SPI.h"
-//#include "Schedule.h"
 #include "LwipIntf.h"
+#include "LwipEthernet.h"
 #include "wl_definitions.h"
 
 #ifndef DEFAULT_MTU
 #define DEFAULT_MTU 1500
 #endif
+
 
 extern "C" void cyw43_hal_generate_laa_mac(__unused int idx, uint8_t buf[6]);
 
@@ -57,12 +57,17 @@ template<class RawDev>
 class LwipIntfDev: public LwipIntf, public RawDev {
 public:
     LwipIntfDev(int8_t cs = SS, SPIClass& spi = SPI, int8_t intr = -1) :
-        RawDev(cs, spi, intr), _mtu(DEFAULT_MTU), _intrPin(intr), _started(false), _default(false) {
+        RawDev(cs, spi, intr), _spiUnit(spi), _mtu(DEFAULT_MTU), _intrPin(intr), _started(false), _default(false) {
         memset(&_netif, 0, sizeof(_netif));
     }
 
+    //The argument order for ESP is not the same as for Arduino. However, there is compatibility code under the hood
+    //to detect Arduino arg order, and handle it correctly.
     bool config(const IPAddress& local_ip, const IPAddress& arg1, const IPAddress& arg2,
                 const IPAddress& arg3 = IPADDR_NONE, const IPAddress& dns2 = IPADDR_NONE);
+
+    // two and one parameter version. 2nd parameter is DNS like in Arduino. IPv4 only
+    bool config(IPAddress local_ip, IPAddress dns = IPADDR_NONE);
 
     // default mac-address is inferred from esp8266's STA interface
     bool begin(const uint8_t* macAddress = nullptr, const uint16_t mtu = DEFAULT_MTU);
@@ -73,6 +78,10 @@ public:
         return &_netif;
     }
 
+    uint8_t* macAddress(uint8_t* mac) {
+        memcpy(mac, &_netif.hwaddr, 6);
+        return mac;
+    }
     IPAddress localIP() const {
         return IPAddress(ip4_addr_get_u32(ip_2_ip4(&_netif.ip_addr)));
     }
@@ -81,6 +90,17 @@ public:
     }
     IPAddress gatewayIP() const {
         return IPAddress(ip4_addr_get_u32(ip_2_ip4(&_netif.gw)));
+    }
+    IPAddress dnsIP(int n = 0) const {
+        return IPAddress(dns_getserver(n));
+    }
+    void setDNS(IPAddress dns1, IPAddress dns2 = INADDR_ANY) {
+        if (dns1.isSet()) {
+            dns_setserver(0, dns1);
+        }
+        if (dns2.isSet()) {
+            dns_setserver(1, dns2);
+        }
     }
 
     // 1. Currently when no default is set, esp8266-Arduino uses the first
@@ -107,7 +127,22 @@ public:
     // ICMP echo, returns TTL
     int ping(IPAddress host, uint8_t ttl, uint32_t timeout = 5000);
 
-    int hostByName(const char* aHostname, IPAddress& aResult, int timeout);
+    int hostByName(const char* aHostname, IPAddress& aResult, int timeout = 15000);
+
+    inline void setSPISpeed(int mhz) {
+        setSPISettings(SPISettings(mhz, MSBFIRST, SPI_MODE0));
+    }
+
+    void setSPISettings(SPISettings s) {
+        _spiSettings = s;
+    }
+
+    uint32_t packetsReceived() {
+        return _packetsReceived;
+    }
+    uint32_t packetsSent() {
+        return _packetsSent;
+    }
 
     // ESP8266WiFi API compatibility
 
@@ -121,12 +156,13 @@ protected:
     static err_t netif_init_s(netif* netif);
     static err_t linkoutput_s(netif* netif, struct pbuf* p);
     static void  netif_status_callback_s(netif* netif);
-
+public:
     // called on a regular basis or on interrupt
     err_t handlePackets();
-
+protected:
     // members
-
+    SPIClass& _spiUnit;
+    SPISettings _spiSettings = SPISettings(4000000, MSBFIRST, SPI_MODE0);
     netif _netif;
 
     uint16_t _mtu;
@@ -141,65 +177,17 @@ protected:
     volatile int _ping_ttl;
     static u8_t _pingCB(void *arg, struct raw_pcb *pcb, struct pbuf *p, const ip_addr_t *addr);
 
-    // DNS lookup callback
-    bool _dns_lookup_pending = false;
-    typedef struct {
-        IPAddress *ip;
-        LwipIntfDev<RawDev> *wifi;
-    } _dns_cb_t;
-    static void _dns_found_callback(const char *name, const ip_addr_t *ipaddr, void *callback_arg);
+    // Packet handler number
+    int _phID = -1;
+
+    uint32_t _packetsReceived = 0;
+    uint32_t _packetsSent = 0;
 };
 
 
 template<class RawDev>
-void LwipIntfDev<RawDev>::_dns_found_callback(const char *name, const ip_addr_t *ipaddr, void *callback_arg) {
-    (void) name;
-    _dns_cb_t *cb = (_dns_cb_t *)callback_arg;
-    if (!cb->wifi->_dns_lookup_pending) {
-        return;
-    }
-    if (ipaddr) {
-        *(cb->ip) = IPAddress(ipaddr);
-    }
-    cb->wifi->_dns_lookup_pending = false; // resume hostByName
-}
-
-template<class RawDev>
 int LwipIntfDev<RawDev>::hostByName(const char* aHostname, IPAddress& aResult, int timeout_ms) {
-    ip_addr_t addr;
-    aResult = static_cast<uint32_t>(0xffffffff);
-
-    if (aResult.fromString(aHostname)) {
-        // Host name is a IP address use it!
-        return 1;
-    }
-
-    _dns_cb_t cb = { &aResult, this };
-#if LWIP_IPV4 && LWIP_IPV6
-    err_t err = dns_gethostbyname_addrtype(aHostname, &addr, &_dns_found_callback, &cb, LWIP_DNS_ADDRTYPE_DEFAULT);
-#else
-    err_t err = dns_gethostbyname(aHostname, &addr, &_dns_found_callback, &cb);
-#endif
-    if (err == ERR_OK) {
-        aResult = IPAddress(&addr);
-    } else if (err == ERR_INPROGRESS) {
-        _dns_lookup_pending = true;
-        uint32_t now = millis();
-        while ((millis() - now < (uint32_t)timeout_ms) && _dns_lookup_pending) {
-            sys_check_timeouts();
-            delay(10);
-        }
-        _dns_lookup_pending = false;
-        if (aResult.isSet()) {
-            err = ERR_OK;
-        }
-    }
-
-    if (err == ERR_OK) {
-        return 1;
-    }
-
-    return 0;
+    return ::hostByName(aHostname, aResult, timeout_ms);
 }
 
 template<class RawDev>
@@ -291,9 +279,36 @@ bool LwipIntfDev<RawDev>::config(const IPAddress& localIP, const IPAddress& gate
     }
     return true;
 }
+
+template<class RawDev>
+bool LwipIntfDev<RawDev>::config(IPAddress local_ip, IPAddress dns) {
+
+    if (!local_ip.isSet()) {
+        return config(INADDR_ANY, INADDR_ANY, INADDR_ANY);
+    }
+    if (!local_ip.isV4()) {
+        return false;
+    }
+    IPAddress gw(local_ip);
+    gw[3] = 1;
+    if (!dns.isSet()) {
+        dns = gw;
+    }
+    return config(local_ip, gw, IPAddress(255, 255, 255, 0), dns);
+}
+
 extern char wifi_station_hostname[];
 template<class RawDev>
-boolean LwipIntfDev<RawDev>::begin(const uint8_t* macAddress, const uint16_t mtu) {
+bool LwipIntfDev<RawDev>::begin(const uint8_t* macAddress, const uint16_t mtu) {
+    lwip_init();
+    __startEthernetContext();
+
+    if (RawDev::needsSPI()) {
+        _spiUnit.begin();
+        // Set SPI clocks/etc. per request, doesn't seem to be direct way other than a fake transaction
+        _spiUnit.beginTransaction(_spiSettings);
+        _spiUnit.endTransaction();
+    }
     if (mtu) {
         _mtu = mtu;
     }
@@ -343,6 +358,8 @@ boolean LwipIntfDev<RawDev>::begin(const uint8_t* macAddress, const uint16_t mtu
         return false;
     }
 
+    _phID = __addEthernetPacketHandler([this] { this->handlePackets(); });
+
     if (localIP().v4() == 0) {
         // IP not set, starting DHCP
         _netif.flags |= NETIF_FLAG_UP;
@@ -368,6 +385,7 @@ boolean LwipIntfDev<RawDev>::begin(const uint8_t* macAddress, const uint16_t mtu
 #endif
 #if LWIP_IPV6_DHCP6_STATELESS
     err_t __res = dhcp6_enable_stateless(&_netif);
+    (void) __res; // Not used except for debug
     DEBUGV("LwipIntfDev: Enabled DHCP6 stateless: %d\n", __res);
 #endif
 
@@ -383,26 +401,17 @@ boolean LwipIntfDev<RawDev>::begin(const uint8_t* macAddress, const uint16_t mtu
         }
     }
 
-#if 0
-    if (_intrPin < 0
-            && !schedule_recurrent_function_us(
-    [&]() {
-    this->handlePackets();
-        return true;
-    },
-    100)) {
-        netif_remove(&_netif);
-        return false;
-    }
-#endif
     return true;
 }
 
 template<class RawDev>
 void LwipIntfDev<RawDev>::end() {
+    __removeEthernetPacketHandler(_phID);
+
     RawDev::end();
+
     netif_remove(&_netif);
-    memset(&_netif, 0, sizeof(_netif));
+
     _started = false;
 }
 
@@ -415,16 +424,16 @@ wl_status_t LwipIntfDev<RawDev>::status() {
 template<class RawDev>
 err_t LwipIntfDev<RawDev>::linkoutput_s(netif* netif, struct pbuf* pbuf) {
     LwipIntfDev* lid = (LwipIntfDev*)netif->state;
-
+    ethernet_arch_lwip_begin();
     uint16_t len = lid->sendFrame((const uint8_t*)pbuf->payload, pbuf->len);
-
+    lid->_packetsSent++;
 #if PHY_HAS_CAPTURE
     if (phy_capture) {
         phy_capture(lid->_netif.num, (const char*)pbuf->payload, pbuf->len, /*out*/ 1,
                     /*success*/ len == pbuf->len);
     }
 #endif
-
+    ethernet_arch_lwip_end();
     return len == pbuf->len ? ERR_OK : ERR_MEM;
 }
 
@@ -530,6 +539,8 @@ err_t LwipIntfDev<RawDev>::handlePackets() {
             pbuf_free(pbuf);
             return ERR_BUF;
         }
+
+        _packetsReceived++;
 
         err_t err = _netif.input(pbuf, &_netif);
 

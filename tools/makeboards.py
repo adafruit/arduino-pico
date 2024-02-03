@@ -28,8 +28,8 @@ def BuildDebugPort(name):
         print("%s.menu.dbgport.%s.build.debug_port=-DDEBUG_RP2040_PORT=%s" % (name, p, p))
 
 def BuildDebugLevel(name):
-    for l in [ ("None", ""), ("Core", "-DDEBUG_RP2040_CORE"), ("SPI", "-DDEBUG_RP2040_SPI"), ("Wire", "-DDEBUG_RP2040_WIRE"),
-               ("All", "-DDEBUG_RP2040_WIRE -DDEBUG_RP2040_SPI -DDEBUG_RP2040_CORE"), ("NDEBUG", "-DNDEBUG") ]:
+    for l in [ ("None", ""), ("Core", "-DDEBUG_RP2040_CORE"), ("SPI", "-DDEBUG_RP2040_SPI"), ("Wire", "-DDEBUG_RP2040_WIRE"), ("Bluetooth", "-DDEBUG_RP2040_BLUETOOTH"),
+               ("All", "-DDEBUG_RP2040_WIRE -DDEBUG_RP2040_SPI -DDEBUG_RP2040_CORE -DDEBUG_RP2040_BLUETOOTH"), ("NDEBUG", "-DNDEBUG") ]:
         print("%s.menu.dbglvl.%s=%s" % (name, l[0], l[0]))
         print("%s.menu.dbglvl.%s.build.debug_level=%s" % (name, l[0], l[1]))
 
@@ -88,6 +88,8 @@ def BuildUSBStack(name):
     print('%s.menu.usbstack.picosdk.build.usbstack_flags=' % (name))
     print("%s.menu.usbstack.tinyusb=Adafruit TinyUSB" % (name))
     print('%s.menu.usbstack.tinyusb.build.usbstack_flags=-DUSE_TINYUSB "-I{runtime.platform.path}/libraries/Adafruit_TinyUSB_Arduino/src/arduino"' % (name))
+    print("%s.menu.usbstack.tinyusb_host=Adafruit TinyUSB Host" % (name))
+    print('%s.menu.usbstack.tinyusb_host.build.usbstack_flags=-DUSE_TINYUSB -DUSE_TINYUSB_HOST "-I{runtime.platform.path}/libraries/Adafruit_TinyUSB_Arduino/src/arduino"' % (name))
     print("%s.menu.usbstack.nousb=No USB" % (name))
     print('%s.menu.usbstack.nousb.build.usbstack_flags="-DNO_USB -DDISABLE_USB_SERIAL -I{runtime.platform.path}/tools/libpico"' % (name))
 
@@ -119,7 +121,6 @@ def BuildIPBTStack(name):
 def BuildUploadMethodMenu(name):
     for a, b, c, d, e, f in [ ["default", "Default (UF2)", 256, "picoprobe_cmsis_dap.tcl", "uf2conv", "uf2conv-network"],
                               ["picotool", "Picotool", 256, "picoprobe.tcl", "picotool", None],
-                              ["picoprobe", "Picoprobe", 256, "picoprobe.tcl", "picoprobe", None],
                               ["picoprobe_cmsis_dap", "Picoprobe (CMSIS-DAP)", 256, "picoprobe_cmsis_dap.tcl", "picoprobe_cmsis_dap", None],
                               ["picodebug", "Pico-Debug", 240, "picodebug.tcl", "picodebug", None] ]:
         print("%s.menu.uploadmethod.%s=%s" % (name, a, b))
@@ -206,7 +207,7 @@ def BuildGlobalMenuList():
     print("menu.ipbtstack=IP/Bluetooth Stack")
     print("menu.uploadmethod=Upload Method")
 
-def MakeBoard(name, vendor_name, product_name, vid, pid, pwr, boarddefine, flashsizemb, boot2, extra = None):
+def MakeBoard(name, vendor_name, product_name, vid, pid, pwr, boarddefine, flashsizemb, boot2, extra = None, board_url = None):
     fssizelist = [ 0, 64 * 1024, 128 * 1024, 256 * 1024, 512 * 1024 ]
     for i in range(1, flashsizemb):
         fssizelist.append(i * 1024 * 1024)
@@ -216,6 +217,9 @@ def MakeBoard(name, vendor_name, product_name, vid, pid, pwr, boarddefine, flash
         BuildFlashMenu(name, 4*1024*1024, [0, 3*1024*1024, 2*1024*1024])
         BuildFlashMenu(name, 8*1024*1024, [0, 7*1024*1024, 4*1024*1024, 2*1024*1024])
         BuildFlashMenu(name, 16*1024*1024, [0, 15*1024*1024, 14*1024*1024, 12*1024*1024, 8*1024*1024, 4*1024*1024, 2*1024*1024])
+    elif name == "pimoroni_tiny2040":
+        BuildFlashMenu(name, 2*1024*1024, fssizelist)
+        BuildFlashMenu(name, 8*1024*1024, [0, 7*1024*1024, 4*1024*1024, 2*1024*1024])
     else:
         BuildFlashMenu(name, flashsizemb * 1024 * 1024, fssizelist)
     BuildFreq(name)
@@ -234,13 +238,13 @@ def MakeBoard(name, vendor_name, product_name, vid, pid, pwr, boarddefine, flash
     elif name.startswith("adafruit") and "w25q080" in boot2:
         BuildBootW25Q(name)
     BuildUploadMethodMenu(name)
-    MakeBoardJSON(name, vendor_name, product_name, vid, pid, pwr, boarddefine, flashsizemb, boot2, extra)
+    MakeBoardJSON(name, vendor_name, product_name, vid, pid, pwr, boarddefine, flashsizemb, boot2, extra, board_url)
     global pkgjson
     thisbrd = {}
     thisbrd['name'] = "%s %s" % (vendor_name, product_name)
     pkgjson['packages'][0]['platforms'][0]['boards'].append(thisbrd)
 
-def MakeBoardJSON(name, vendor_name, product_name, vid, pid, pwr, boarddefine, flashsizemb, boot2, extra):
+def MakeBoardJSON(name, vendor_name, product_name, vid, pid, pwr, boarddefine, flashsizemb, boot2, extra, board_url):
     if type(pid) == list:
         pid = pid[0]
     if extra != None:
@@ -302,7 +306,7 @@ def MakeBoardJSON(name, vendor_name, product_name, vid, pid, pwr, boarddefine, f
       "pico-debug"
     ]
   },
-  "url": "https://www.raspberrypi.org/products/raspberry-pi-pico/",
+  "url": "BOARDURL",
   "vendor": "VENDORNAME"
 }\n"""\
 .replace('VARIANTNAME', name)\
@@ -310,6 +314,7 @@ def MakeBoardJSON(name, vendor_name, product_name, vid, pid, pwr, boarddefine, f
 .replace('BOOT2', boot2)\
 .replace('VID', vid.upper().replace("X", "x"))\
 .replace('PID', pid.upper().replace("X", "x"))\
+.replace('BOARDURL', board_url or 'https://www.raspberrypi.org/products/raspberry-pi-pico/')\
 .replace('VENDORNAME', vendor_name)\
 .replace('PRODUCTNAME', product_name)\
 .replace('FLASHSIZE', str(1024*1024*flashsizemb))\
@@ -348,6 +353,7 @@ MakeBoard("adafruit_feather_usb_host", "Adafruit", "Feather RP2040 USB Host", "0
 MakeBoard("adafruit_feather_can", "Adafruit", "Feather RP2040 CAN", "0x239a", "0x812f", 250, "ADAFRUIT_FEATHER_RP2040_CAN", 8, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_feather_prop_maker", "Adafruit", "Feather RP2040 Prop-Maker", "0x239a", "0x8131", 250, "ADAFRUIT_FEATHER_RP2040_PROP_MAKER", 8, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_itsybitsy", "Adafruit", "ItsyBitsy RP2040", "0x239a", "0x80fd", 250, "ADAFRUIT_ITSYBITSY_RP2040", 8, "boot2_w25q080_2_padded_checksum")
+MakeBoard("adafruit_metro", "Adafruit", "Metro RP2040", "0x239a", "0x813d", 250, "ADAFRUIT_METRO_RP2040", 16, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_qtpy", "Adafruit", "QT Py RP2040", "0x239a", "0x80f7", 250, "ADAFRUIT_QTPY_RP2040", 8, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_stemmafriend", "Adafruit", "STEMMA Friend RP2040", "0x239a", "0x80e3", 250, "ADAFRUIT_STEMMAFRIEND_RP2040", 8, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_trinkeyrp2040qt", "Adafruit", "Trinkey RP2040 QT", "0x239a", "0x8109", 250, "ADAFRUIT_TRINKEYQT_RP2040", 8, "boot2_w25q080_2_padded_checksum")
@@ -368,15 +374,23 @@ MakeBoard("bridgetek_idm2040-7a", "BridgeTek", "IDM2040-7A", "0x2e8a", "0x1041",
 # Cytron
 MakeBoard("cytron_maker_nano_rp2040", "Cytron", "Maker Nano RP2040", "0x2e8a", "0x100f", 250, "CYTRON_MAKER_NANO_RP2040", 2, "boot2_w25q080_2_padded_checksum")
 MakeBoard("cytron_maker_pi_rp2040", "Cytron", "Maker Pi RP2040", "0x2e8a", "0x1000", 250, "CYTRON_MAKER_PI_RP2040", 2, "boot2_w25q080_2_padded_checksum")
+MakeBoard("cytron_maker_uno_rp2040", "Cytron", "Maker Uno RP2040", "0x2e8a", "0x1071", 250, "CYTRON_MAKER_UNO_RP2040", 2, "boot2_w25q080_2_padded_checksum")
 
 # DatanoiseTV
 MakeBoard("datanoisetv_picoadk", "DatanoiseTV", "PicoADK", "0x2e8a", "0x000a", 250, "DATANOISETV_PICOADK", 2, "boot2_w25q080_2_padded_checksum")
+
+# Degz Robotics
+MakeBoard("degz_suibo", "Degz Robotics", "Suibo RP2040", "0x2e8a", "0xf00a", 250, "DEGZ_SUIBO_RP2040", 16, "boot2_generic_03h_4_padded_checksum", board_url="https://www.degzrobotics.com/suibo")
 
 # DeRuiLab
 MakeBoard("flyboard2040_core", "DeRuiLab", "FlyBoard2040Core", "0x2e8a", "0x008a", 500, "FLYBOARD2040_CORE", 4, "boot2_w25q080_2_padded_checksum")
 
 # DFRobot
 MakeBoard("dfrobot_beetle_rp2040", "DFRobot", "Beetle RP2040", "0x3343", "0x4253", 250, "DFROBOT_BEETLE_RP2040", 2, "boot2_w25q080_2_padded_checksum")
+
+# DudesCab
+MakeBoard("DudesCab", "L'atelier d'Arnoz", "DudesCab", "0x2e8a", "0x106F", 250, "RASPBERRY_PI_PICO", 4, "boot2_w25q080_2_padded_checksum")
+
 
 # ElectronicCat
 MakeBoard("electroniccats_huntercat_nfc", "ElectronicCats", "HunterCat NFC RP2040", "0x2E8A", "0x1037", 500, "ELECTRONICCATS_HUNTERCAT_NFC", 2, "boot2_w25q080_2_padded_checksum")
@@ -395,7 +409,8 @@ MakeBoard("challenger_nb_2040_wifi", "iLabs", "Challenger NB 2040 WiFi", "0x2e8a
 MakeBoard("challenger_2040_sdrtc", "iLabs", "Challenger 2040 SD/RTC", "0x2e8a", "0x102d", 250, "CHALLENGER_2040_SDRTC_RP2040", 8, "boot2_w25q080_2_padded_checksum")
 MakeBoard("challenger_2040_nfc", "iLabs", "Challenger 2040 NFC", "0x2e8a", "0x1036", 250, "CHALLENGER_2040_NFC_RP2040", 8, "boot2_w25q080_2_padded_checksum")
 MakeBoard("challenger_2040_uwb", "iLabs", "Challenger 2040 UWB", "0x2e8a", "0x1052", 500, "CHALLENGER_2040_UWB_RP2040", 8, "boot2_w25q080_2_padded_checksum")
-MakeBoard("ilabs_rpico32", "iLabs", "RPICO32", "0x2e8a", "0x1010", 250, "ILABS_2040_RPICO32_RP2040", 8, "boot2_w25q080_2_padded_checksum")
+MakeBoard("connectivity_2040_lte_wifi_ble", "iLabs", "Connectivity 2040 LTE/WiFi/BLE", "0x2e8a", "0x107b", 500, "CONNECTIVITY_2040_LTE_WIFI_BLE_RP2040", 8, "boot2_w25q080_2_padded_checksum", ["WIFIESPAT2"])
+MakeBoard("ilabs_rpico32", "iLabs", "RPICO32", "0x2e8a", "0x1010", 250, "ILABS_2040_RPICO32_RP2040", 8, "boot2_w25q080_2_padded_checksum", ["WIFIESPAT2"])
 
 # Melopero
 MakeBoard("melopero_cookie_rp2040", "Melopero", "Cookie RP2040", "0x2e8a", "0x1011", 250, "MELOPERO_COOKIE_RP2040", 8, "boot2_w25q080_2_padded_checksum")
@@ -410,6 +425,17 @@ MakeBoard("nullbits_bit_c_pro", "nullbits", "Bit-C PRO", "0x2e8a", "0x6e61", 500
 # Pimoroni
 MakeBoard("pimoroni_pga2040", "Pimoroni", "PGA2040", "0x2e8a", "0x1008", 250, "PIMORONI_PGA2040", 8, "boot2_w25q64jv_4_padded_checksum")
 MakeBoard("pimoroni_plasma2040", "Pimoroni", "Plasma2040", "0x2e8a", "0x100a", 500, "PIMORONI_PLASMA2040", 2, "boot2_w25q080_2_padded_checksum")
+MakeBoard("pimoroni_tiny2040", "Pimoroni", "Tiny2040", "0x2e8a", "0x100a", 500, "PIMORONI_TINY2040", 2, "boot2_w25q64jv_4_padded_checksum")
+
+# RAKwireless
+MakeBoard("rakwireless_rak11300", "RAKwireless", "RAK11300", "0x2e8a", "0x00c0", 500, "RAKWIRELESS_RAK11300", 2, "boot2_w25q16jvxq_4_padded_checksum", None, "https://store.rakwireless.com/products/wisduo-lpwan-module-rak11300")
+
+# Redscorp
+MakeBoard("redscorp_rp2040_eins", "redscorp", "RP2040-Eins", "0x2341", ["0x005f", "0x805f", "0x015f", "0x025f"] , 250, "REDSCORP_RP2040_EINS", 16, "boot2_w25q080_2_padded_checksum")
+MakeBoard("redscorp_rp2040_promini", "redscorp", "RP2040-ProMini", "0x2341", ["0x005f", "0x805f", "0x015f", "0x025f"] , 250, "REDSCORP_RP2040_PROMINI", 16, "boot2_w25q080_2_padded_checksum")
+
+# Sea-Picro
+MakeBoard("sea_picro", "Generic", "Sea-Picro", "0x2e8a", "0xf00a", 500, "SEA_PICRO", 8, "boot2_w25q64jv_4_padded_checksum", None, "https://github.com/joshajohnson/sea-picro")
 
 # Silicognition
 MakeBoard("silicognition_rp2040_shim", "Silicognition", "RP2040-Shim", "0x1209", "0xf502", 500, "SILICOGNITION_RP2040_SHIM", 4, "boot2_generic_03h_4_padded_checksum")

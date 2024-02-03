@@ -1,10 +1,13 @@
 #pragma once
 
+#include <stdint.h>
+
 #define PINS_COUNT          (30u)
 #define NUM_DIGITAL_PINS    (30u)
 #define NUM_ANALOG_INPUTS   (4u)
 #define NUM_ANALOG_OUTPUTS  (0u)
 #define ADC_RESOLUTION      (12u)
+#define WIRE_INTERFACES_COUNT (WIRE_HOWMANY)
 
 #ifdef PIN_LED
 #define LED_BUILTIN PIN_LED

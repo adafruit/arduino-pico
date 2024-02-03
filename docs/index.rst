@@ -30,6 +30,7 @@ For the latest version, always check https://github.com/earlephilhower/arduino-p
 
    Analog I/O <analog>
    Digital I/O <digital>
+   BOOTSEL Button <bootsel>
    EEPROM <eeprom>
    I2S Audio <i2s>
    PWM Audio <pwm>
@@ -50,6 +51,7 @@ For the latest version, always check https://github.com/earlephilhower/arduino-p
    FreeRTOS SMP (multicore) <freertos>
 
    WiFi (Pico-W Support) <wifi>
+   Ethernet (Wired) <ethernet>
    WiFiClient <wificlient>
    WiFiServer <wifiserver>
    WiFiUDP <wifiudp>
