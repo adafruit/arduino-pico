@@ -78,6 +78,9 @@
                      "name": "Adafruit Pyrate"
                   },
                   {
+                     "name": "Adafruit Floppsy"
+                  },
+                  {
                      "name": "Arduino Nano RP2040 Connect"
                   },
                   {

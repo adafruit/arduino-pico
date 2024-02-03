@@ -361,6 +361,7 @@ MakeBoard("adafruit_macropad2040", "Adafruit", "MacroPad RP2040", "0x239a", "0x8
 MakeBoard("adafruit_metro_rp2040", "Adafruit", "Metro RP2040", "0x239a", "0x813D", 250, "ADAFRUIT_METRO_RP2040", 8, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_kb2040", "Adafruit", "KB2040", "0x239a", "0x8105", 250, "ADAFRUIT_KB2040_RP2040", 8, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_pyrate", "Adafruit", "Pyrate", "0x239a", "0x8139", 250, "ADAFRUIT_PYRATE_RP2040", 8, "boot2_w25q080_2_padded_checksum")
+MakeBoard("adafruit_floppsy", "Adafruit", "Floppsy", "0x239a", "0x8151", 250, "ADAFRUIT_FLOPPSY_RP2040", 16, "boot2_w25q080_2_padded_checksum")
 
 # Arduino
 MakeBoard("arduino_nano_connect", "Arduino", "Nano RP2040 Connect", "0x2341", ["0x005e", "0x805e", "0x015e", "0x025e"] , 250, "NANO_RP2040_CONNECT", 16, "boot2_w25q080_2_padded_checksum")
