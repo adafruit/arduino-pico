@@ -112,6 +112,7 @@ env.Append(
     CCFLAGS=[
         "-Os", # Optimize for size by default
         "-Werror=return-type",
+        "-Wno-psabi",
         "-march=armv6-m",
         "-mcpu=cortex-m0plus",
         "-mthumb",
@@ -157,6 +158,7 @@ env.Append(
         "-u_scanf_float",
         # no cross-reference table, heavily spams the output
         # "-Wl,--cref",
+        "-Wl,--no-warn-rwx-segments",
         "-Wl,--check-sections",
         "-Wl,--gc-sections",
         "-Wl,--unresolved-symbols=report-all",
@@ -319,9 +321,15 @@ libs = []
 
 variant = board.get("build.arduino.earlephilhower.variant", board.get("build.variant", ""))
 
+# The following 3 lines are adapted from espressif/arduino-esp32, also licensed under apache2
+variants_dir = os.path.join(FRAMEWORK_DIR, "variants")
+
+if "build.variants_dir" in board:
+    variants_dir = os.path.join("$PROJECT_DIR", board.get("build.variants_dir"))
+
 if variant != "":
     env.Append(CPPPATH=[
-        os.path.join(FRAMEWORK_DIR, "variants", variant)
+        os.path.join(variants_dir, variant)
     ])
 
     env.Append(CPPDEFINES=[
@@ -333,7 +341,7 @@ if variant != "":
     # otherwise weak function overriding won't work in the linking stage.
     env.BuildSources(
         os.path.join("$BUILD_DIR", "FrameworkArduinoVariant"),
-        os.path.join(FRAMEWORK_DIR, "variants", variant))
+        os.path.join(variants_dir, variant))
 
 libs.append(
     env.BuildLibrary(

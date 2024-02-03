@@ -21,6 +21,8 @@
 #include "SPI.h"
 #include <hardware/spi.h>
 #include <hardware/gpio.h>
+#include <hardware/structs/iobank0.h>
+#include <hardware/irq.h>
 
 #ifdef USE_TINYUSB
 // For Serial when selecting TinyUSB.  Can't include in the core because Arduino IDE
@@ -35,7 +37,7 @@ SPIClassRP2040::SPIClassRP2040(spi_inst_t *spi, pin_size_t rx, pin_size_t cs, pi
     _spi = spi;
     _running = false;
     _initted = false;
-    _spis = SPISettings();
+    _spis = SPISettings(0, LSBFIRST, SPI_MODE0); // Ensure spi_init called by setting current freq to 0
     _RX = rx;
     _TX = tx;
     _SCK = sck;
@@ -108,8 +110,8 @@ byte SPIClassRP2040::transfer(uint8_t data) {
         return 0;
     }
     data = (_spis.getBitOrder() == MSBFIRST) ? data : reverseByte(data);
-    spi_set_format(_spi, 8, cpol(), cpha(), SPI_MSB_FIRST);
     DEBUGSPI("SPI::transfer(%02x), cpol=%d, cpha=%d\n", data, cpol(), cpha());
+    hw_write_masked(&spi_get_hw(_spi)->cr0, (8 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS); // Fast set to 8-bits
     spi_write_read_blocking(_spi, &data, &ret, 1);
     ret = (_spis.getBitOrder() == MSBFIRST) ? ret : reverseByte(ret);
     DEBUGSPI("SPI: read back %02x\n", ret);
@@ -122,8 +124,8 @@ uint16_t SPIClassRP2040::transfer16(uint16_t data) {
         return 0;
     }
     data = (_spis.getBitOrder() == MSBFIRST) ? data : reverse16Bit(data);
-    spi_set_format(_spi, 16, cpol(), cpha(), SPI_MSB_FIRST);
     DEBUGSPI("SPI::transfer16(%04x), cpol=%d, cpha=%d\n", data, cpol(), cpha());
+    hw_write_masked(&spi_get_hw(_spi)->cr0, (16 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS); // Fast set to 16-bits
     spi_write16_read16_blocking(_spi, &data, &ret, 1);
     ret = (_spis.getBitOrder() == MSBFIRST) ? ret : reverse16Bit(ret);
     DEBUGSPI("SPI: read back %02x\n", ret);
@@ -145,14 +147,14 @@ void SPIClassRP2040::transfer(const void *txbuf, void *rxbuf, size_t count) {
         return;
     }
 
+    hw_write_masked(&spi_get_hw(_spi)->cr0, (8 - 1) << SPI_SSPCR0_DSS_LSB, SPI_SSPCR0_DSS_BITS); // Fast set to 8-bits
+
     DEBUGSPI("SPI::transfer(%p, %p, %d)\n", txbuf, rxbuf, count);
     const uint8_t *txbuff = reinterpret_cast<const uint8_t *>(txbuf);
     uint8_t *rxbuff = reinterpret_cast<uint8_t *>(rxbuf);
 
     // MSB version is easy!
     if (_spis.getBitOrder() == MSBFIRST) {
-        spi_set_format(_spi, 8, cpol(), cpha(), SPI_MSB_FIRST);
-
         if (rxbuf == nullptr) { // transmit only!
             spi_write_blocking(_spi, txbuff, count);
             return;
@@ -177,23 +179,55 @@ void SPIClassRP2040::transfer(const void *txbuf, void *rxbuf, size_t count) {
 }
 
 void SPIClassRP2040::beginTransaction(SPISettings settings) {
-    DEBUGSPI("SPI::beginTransaction(clk=%lu, bo=%s\n", _spis.getClockFreq(), (_spis.getBitOrder() == MSBFIRST) ? "MSB" : "LSB");
+    noInterrupts(); // Avoid possible race conditions if IRQ comes in while main app is in middle of this
+    DEBUGSPI("SPI::beginTransaction(clk=%lu, bo=%s)\n", settings.getClockFreq(), (settings.getBitOrder() == MSBFIRST) ? "MSB" : "LSB");
     if (_initted && settings == _spis) {
         DEBUGSPI("SPI: Reusing existing initted SPI\n");
     } else {
-        _spis = settings;
-        if (_initted) {
-            DEBUGSPI("SPI: deinitting currently active SPI\n");
-            spi_deinit(_spi);
+        /* Only de-init if the clock changes frequency */
+        if (settings.getClockFreq() != _spis.getClockFreq()) {
+            if (_initted) {
+                DEBUGSPI("SPI: deinitting currently active SPI\n");
+                spi_deinit(_spi);
+            }
+            DEBUGSPI("SPI: initting SPI\n");
+            spi_init(_spi, settings.getClockFreq());
+            DEBUGSPI("SPI: actual baudrate=%u\n", spi_get_baudrate(_spi));
         }
-        DEBUGSPI("SPI: initting SPI\n");
-        spi_init(_spi, _spis.getClockFreq());
+        _spis = settings;
+        spi_set_format(_spi, 8, cpol(), cpha(), SPI_MSB_FIRST);
         _initted = true;
     }
+    // Disable any IRQs that are being used for SPI
+    io_irq_ctrl_hw_t *irq_ctrl_base = get_core_num() ? &iobank0_hw->proc1_irq_ctrl : &iobank0_hw->proc0_irq_ctrl;
+    DEBUGSPI("SPI: IRQ masks before = %08x %08x %08x %08x\n", (unsigned)irq_ctrl_base->inte[0], (unsigned)irq_ctrl_base->inte[1], (unsigned)irq_ctrl_base->inte[2], (unsigned)irq_ctrl_base->inte[3]);
+    for (auto entry : _usingIRQs) {
+        int gpio = entry.first;
+
+        // There is no gpio_get_irq, so manually twiddle the register
+        io_rw_32 *en_reg = &irq_ctrl_base->inte[gpio / 8];
+        uint32_t val = ((*en_reg) >> (4 * (gpio % 8))) & 0xf;
+        _usingIRQs.insert_or_assign(gpio, val);
+        DEBUGSPI("SPI: GPIO %d = %lu\n", gpio, val);
+        (*en_reg) ^= val << (4 * (gpio % 8));
+    }
+    DEBUGSPI("SPI: IRQ masks after = %08x %08x %08x %08x\n", (unsigned)irq_ctrl_base->inte[0], (unsigned)irq_ctrl_base->inte[1], (unsigned)irq_ctrl_base->inte[2], (unsigned)irq_ctrl_base->inte[3]);
+    interrupts();
 }
 
 void SPIClassRP2040::endTransaction(void) {
+    noInterrupts(); // Avoid race condition so the GPIO IRQs won't come back until all state is restored
     DEBUGSPI("SPI::endTransaction()\n");
+    // Re-enablke IRQs
+    for (auto entry : _usingIRQs) {
+        int gpio = entry.first;
+        int mode = entry.second;
+        gpio_set_irq_enabled(gpio, mode, true);
+    }
+    io_irq_ctrl_hw_t *irq_ctrl_base = get_core_num() ? &iobank0_hw->proc1_irq_ctrl : &iobank0_hw->proc0_irq_ctrl;
+    (void) irq_ctrl_base;
+    DEBUGSPI("SPI: IRQ masks = %08x %08x %08x %08x\n", (unsigned)irq_ctrl_base->inte[0], (unsigned)irq_ctrl_base->inte[1], (unsigned)irq_ctrl_base->inte[2], (unsigned)irq_ctrl_base->inte[3]);
+    interrupts();
 }
 
 bool SPIClassRP2040::setRX(pin_size_t pin) {
@@ -202,6 +236,10 @@ bool SPIClassRP2040::setRX(pin_size_t pin) {
                                   };
     if ((!_running) && ((1 << pin) & valid[spi_get_index(_spi)])) {
         _RX = pin;
+        return true;
+    }
+
+    if (_RX == pin) {
         return true;
     }
 
@@ -222,6 +260,10 @@ bool SPIClassRP2040::setCS(pin_size_t pin) {
         return true;
     }
 
+    if (_CS == pin) {
+        return true;
+    }
+
     if (_running) {
         panic("FATAL: Attempting to set SPI%s.CS while running", spi_get_index(_spi) ? "1" : "");
     } else {
@@ -239,6 +281,10 @@ bool SPIClassRP2040::setSCK(pin_size_t pin) {
         return true;
     }
 
+    if (_SCK == pin) {
+        return true;
+    }
+
     if (_running) {
         panic("FATAL: Attempting to set SPI%s.SCK while running", spi_get_index(_spi) ? "1" : "");
     } else {
@@ -253,6 +299,10 @@ bool SPIClassRP2040::setTX(pin_size_t pin) {
                                   };
     if ((!_running) && ((1 << pin) & valid[spi_get_index(_spi)])) {
         _TX = pin;
+        return true;
+    }
+
+    if (_TX == pin) {
         return true;
     }
 
@@ -275,6 +325,7 @@ void SPIClassRP2040::begin(bool hwCS) {
     gpio_set_function(_TX, GPIO_FUNC_SPI);
     // Give a default config in case user doesn't use beginTransaction
     beginTransaction(_spis);
+    endTransaction();
 }
 
 void SPIClassRP2040::end() {
@@ -290,16 +341,19 @@ void SPIClassRP2040::end() {
     }
     gpio_set_function(_SCK, GPIO_FUNC_SIO);
     gpio_set_function(_TX, GPIO_FUNC_SIO);
+    _spis = SPISettings(0, LSBFIRST, SPI_MODE0);
 }
 
 void SPIClassRP2040::setBitOrder(BitOrder order) {
     _spis = SPISettings(_spis.getClockFreq(), order, _spis.getDataMode());
     beginTransaction(_spis);
+    endTransaction();
 }
 
 void SPIClassRP2040::setDataMode(uint8_t uc_mode) {
     _spis = SPISettings(_spis.getClockFreq(), _spis.getBitOrder(), uc_mode);
     beginTransaction(_spis);
+    endTransaction();
 }
 
 void SPIClassRP2040::setClockDivider(uint8_t uc_div) {
@@ -313,5 +367,10 @@ void SPIClassRP2040::setClockDivider(uint8_t uc_div) {
 #define __SPI1_DEVICE spi1
 #endif
 
+#ifdef PIN_SPI0_MISO
 SPIClassRP2040 SPI(__SPI0_DEVICE, PIN_SPI0_MISO, PIN_SPI0_SS, PIN_SPI0_SCK, PIN_SPI0_MOSI);
+#endif
+
+#ifdef PIN_SPI1_MISO
 SPIClassRP2040 SPI1(__SPI1_DEVICE, PIN_SPI1_MISO, PIN_SPI1_SS, PIN_SPI1_SCK, PIN_SPI1_MOSI);
+#endif
