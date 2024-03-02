@@ -32,8 +32,9 @@
 #define FLOPPY_DIRECTION_PIN 8
 
 // Serial
-#define PIN_SERIAL1_TX (0u)
-#define PIN_SERIAL1_RX (1u)
+#define PIN_SERIAL1_TX (24u)
+#define PIN_SERIAL1_RX (21u)
+#define __SERIAL1_DEVICE uart1
 
 // Not pinned out
 #define PIN_SERIAL2_TX (31u)
