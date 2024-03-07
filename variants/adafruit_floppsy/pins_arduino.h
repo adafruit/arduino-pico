@@ -13,6 +13,7 @@
 #define TFT_CS 29
 #define TFT_DC 25
 #define TFT_RESET -1
+#define TFT_RST -1
 #define TFT_BACKLIGHT 28
 
 #define DENSITY_PIN 0 // IDC 2
