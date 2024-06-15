@@ -50,6 +50,11 @@
 #define DEFAULT_MTU 1500
 #endif
 
+enum EthernetLinkStatus {
+    Unknown,
+    LinkON,
+    LinkOFF
+};
 
 extern "C" void cyw43_hal_generate_laa_mac(__unused int idx, uint8_t buf[6]);
 
@@ -149,6 +154,9 @@ public:
 
     wl_status_t status();
 
+    // Arduino Ethernet compatibility
+    EthernetLinkStatus linkStatus();
+
 protected:
     err_t netif_init();
     void  check_route();
@@ -197,8 +205,8 @@ u8_t LwipIntfDev<RawDev>::_pingCB(void *arg, struct raw_pcb *pcb, struct pbuf *p
     (void) addr;
     LwipIntfDev<RawDev> *w = (LwipIntfDev<RawDev> *)arg;
     struct icmp_echo_hdr *iecho;
-    if (pbuf_header(p, -20) == 0) {
-        iecho = (struct icmp_echo_hdr *)p->payload;
+    if (p->len > 20) {
+        iecho = (struct icmp_echo_hdr *)((uint8_t*)p->payload + 20);
         if ((iecho->id == w->_ping_id) && (iecho->seqno == htons(w->_ping_seq_num))) {
             w->_ping_ttl = pcb->ttl;
             pbuf_free(p);
@@ -302,6 +310,11 @@ bool LwipIntfDev<RawDev>::config(IPAddress local_ip, IPAddress dns) {
 extern char wifi_station_hostname[];
 template<class RawDev>
 bool LwipIntfDev<RawDev>::begin(const uint8_t* macAddress, const uint16_t mtu) {
+    if (_started) {
+        // ERROR - Need to ::end before calling ::begin again
+        return false;
+    }
+
     lwip_init();
     __startEthernetContext();
 
@@ -399,7 +412,7 @@ bool LwipIntfDev<RawDev>::begin(const uint8_t* macAddress, const uint16_t mtu) {
         if (RawDev::interruptIsPossible()) {
             noInterrupts(); // Ensure this is atomically set up
             pinMode(_intrPin, INPUT);
-            attachInterruptParam(_intrPin, _irq, LOW, (void*)this);
+            attachInterruptParam(_intrPin, _irq, RawDev::interruptMode(), (void*)this);
             __addEthernetGPIO(_intrPin);
             interrupts();
         } else {
@@ -440,6 +453,11 @@ void LwipIntfDev<RawDev>::_irq(void *param) {
 template<class RawDev>
 wl_status_t LwipIntfDev<RawDev>::status() {
     return _started ? (connected() ? WL_CONNECTED : WL_DISCONNECTED) : WL_NO_SHIELD;
+}
+
+template<class RawDev>
+EthernetLinkStatus LwipIntfDev<RawDev>::linkStatus() {
+    return RawDev::isLinkDetectable() ? _started && RawDev::isLinked() ? LinkON : LinkOFF : Unknown;
 }
 
 template<class RawDev>

@@ -27,6 +27,7 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * Adafruit Trinkey RP2040 QT
 * Arduino Nano RP2040 Connect
 * ArtronShop RP2 Nano
+* Breadstick Raspberry
 * BridgeTek IDM2040-7A
 * Cytron Maker Pi RP2040
 * Cytron Maker Nano RP2040
@@ -37,6 +38,7 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * DFRobot Beetle RP2040
 * ElectronicCats Hunter Cat NFC
 * ExtremeElectronics RC2040
+* GroundStudio Marble Pico
 * Invector Labs Challenger RP2040 WiFi
 * Invector Labs Challenger RP2040 WiFi/BLE
 * Invector Labs Challenger RP2040 WiFi6/BLE
@@ -50,6 +52,8 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * Melopero Cookie RP2040
 * Melopero Shake RP2040
 * Neko Systems BL2040 Mini
+* Olimex RP2040-Pico30
+* Newsan Archi
 * nullbits Bit-C PRO
 * Pimoroni PGA2040
 * Pimoroni Plasma2040
@@ -62,6 +66,7 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * Seeed XIAO RP2040
 * Silicognition RP2040-Shim
 * Solder Party RP2040 Stamp
+* SparkFun MicroMod RP2040
 * SparkFun ProMicro RP2040
 * SparkFun Thing Plus RP2040
 * uPesy RP2040 DevKit
@@ -72,6 +77,8 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * Waveshare RP2040 Plus
 * Waveshare RP2040 LCD 0.96
 * Waveshare RP2040 LCD 1.28
+* Waveshare RP2040 Matrix
+* Waveshare RP2040 PiZero
 * WIZnet W5100S-EVB-Pico
 * WIZnet W5500-EVB-Pico
 * WIZnet WizFi360-EVB-Pico
@@ -80,8 +87,9 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 # Features
 * Adafruit TinyUSB Arduino (USB mouse, keyboard, flash drive, generic HID, CDC Serial, MIDI, WebUSB, others)
 * Bluetooth on the PicoW (Classic and BLE) with Keyboard, Mouse, Joystick, and Virtual Serial
+* Bluetooth Classic and BLE HID master mode (connect to BT keyboard, mouse, or joystick)
 * Generic Arduino USB Serial, Keyboard, Joystick, and Mouse emulation
-* WiFi (Pico W)
+* WiFi (Pico W, ESP32-based ESPHost, Atmel WINC1500)
 * Ethernet (Wired W5500, W5100, ENC28J60)
 * HTTP client and server (WebServer)
 * SSL/TLS/HTTPS
@@ -93,7 +101,8 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * digitalWrite/Read, shiftIn/Out, tone, analogWrite(PWM)/Read, temperature
 * Analog stereo audio in using DMA and the built-in ADC
 * Analog stereo audio out using PWM hardware
-* USB drive mode for data loggers (SingleFileDrive)
+* Bluetooth A2DP audio source (output) and sink (input) on the PicoW
+* USB drive mode for data loggers (SingleFileDrive, FatFSUSB)
 * Peripherals:  SPI master/slave, Wire(I2C) master/slave, dual UART, emulated EEPROM, I2S audio input/output, Servo
 * printf (i.e. debug) output over USB serial
 
@@ -253,6 +262,8 @@ The installed tools include a version of OpenOCD (in the pqt-openocd directory) 
 * [http-parser](https://github.com/nodejs/http-parser) is copyright Joyent, Inc. and other Node contributors.
 * WebServer code modified from the [ESP32 WebServer](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and is copyright (c) 2015 Ivan Grokhotkov and others.
 * [Xoshiro-cpp](https://github.com/Reputeless/Xoshiro-cpp) is copyright (c) 2020 Ryo Suzuki and distributed under the MIT license.
+* [FatFS low-level filesystem](http://elm-chan.org/fsw/ff/) code is Copyright (C) 2024, ChaN, all rights reserved.
+
 
 -Earle F. Philhower, III  
  earlephilhower@yahoo.com

@@ -516,6 +516,12 @@ bool ENC28J60::begin(const uint8_t* address, netif *net) {
 
 /*---------------------------------------------------------------------------*/
 
+void ENC28J60::end() {
+
+}
+
+/*---------------------------------------------------------------------------*/
+
 uint16_t ENC28J60::sendFrame(const uint8_t* data, uint16_t datalen) {
     uint16_t dataend;
 
@@ -709,8 +715,10 @@ uint16_t ENC28J60::phyread(uint8_t reg) {
 
 bool ENC28J60::isLinked() {
     // ( https://github.com/JAndrassy/EthernetENC/tree/master/src/utility/enc28j60.h )
+    ethernet_arch_lwip_gpio_mask();
     ethernet_arch_lwip_begin();
     auto ret = !!(phyread(MACSTAT2) & 0x400);
     ethernet_arch_lwip_end();
+    ethernet_arch_lwip_gpio_unmask();
     return ret;
 }

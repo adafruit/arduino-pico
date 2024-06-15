@@ -27,6 +27,8 @@
 #include <lwIP_CYW43.h>
 #elif defined(ESPHOSTSPI)
 #include <lwIP_ESPHost.h>
+#elif defined(WINC1501_SPI)
+#include <lwIP_WINC1500.h>
 #else
 #include "utility/lwIP_nodriver.h"
 #endif
@@ -70,6 +72,12 @@ public:
         param ssid: Pointer to the SSID string.
     */
     int begin(const char* ssid);
+    /*  Start WiFi connection for OPEN networks, without blocking
+
+        param ssid: Pointer to the SSID string.
+    */
+    int beginNoBlock(const char* ssid);
+
     int beginBSSID(const char* ssid, const uint8_t *bssid);
 
     /*  Start WiFi connection with WEP encryption.
@@ -92,6 +100,15 @@ public:
         param bssid: If non-null, the BSSID associated w/the SSID to connect to
     */
     int begin(const char* ssid, const char *passphrase, const uint8_t *bssid = nullptr);
+    /*  Start WiFi connection with passphrase, without blocking. Check for .connected() for a connection
+        the most secure supported mode will be automatically selected
+
+        param ssid: Pointer to the SSID string.
+        param passphrase: Passphrase. Valid characters in a passphrase
+              must be between ASCII 32-126 (decimal).
+        param bssid: If non-null, the BSSID associated w/the SSID to connect to
+    */
+    int beginNoBlock(const char* ssid, const char *passphrase, const uint8_t *bssid = nullptr);
 
     bool connected();
     bool isConnected() {
@@ -413,6 +430,9 @@ public:
     }
 
 private:
+    // Internal wifi begin. Returns true on success
+    bool _beginInternal(const char* ssid, const char *passphrase, const uint8_t *bssid = nullptr);
+
     int _timeout = 15000;
     String _ssid;
     uint8_t _bssid[6];

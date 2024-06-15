@@ -87,6 +87,9 @@
                      "name": "ArtronShop RP2 Nano"
                   },
                   {
+                     "name": "Breadstick Raspberry"
+                  },
+                  {
                      "name": "BridgeTek IDM2040-7A"
                   },
                   {
@@ -118,6 +121,9 @@
                   },
                   {
                      "name": "ExtremeElectronics RC2040"
+                  },
+                  {
+                     "name": "GroundStudio Marble Pico"
                   },
                   {
                      "name": "iLabs Challenger 2040 LTE"
@@ -165,7 +171,16 @@
                      "name": "Neko Systems BL2040 Mini"
                   },
                   {
+                     "name": "Newsan Archi"
+                  },
+                  {
                      "name": "nullbits Bit-C PRO"
+                  },
+                  {
+                     "name": "Olimex RP2040-Pico30 2MB"
+                  },
+                  {
+                     "name": "Olimex RP2040-Pico30 16MB"
                   },
                   {
                      "name": "Pimoroni PGA2040"
@@ -195,6 +210,9 @@
                      "name": "Solder Party RP2040 Stamp"
                   },
                   {
+                     "name": "SparkFun MicroMod RP2040"
+                  },
+                  {
                      "name": "SparkFun ProMicro RP2040"
                   },
                   {
@@ -220,6 +238,12 @@
                   },
                   {
                      "name": "Waveshare RP2040 One"
+                  },
+                  {
+                     "name": "Waveshare RP2040 Matrix"
+                  },
+                  {
+                     "name": "Waveshare RP2040 PiZero"
                   },
                   {
                      "name": "Waveshare RP2040 Plus 4MB"
