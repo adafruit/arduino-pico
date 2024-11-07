@@ -4,37 +4,36 @@
 #define PIN_LED        (28u)
 
 // NeoPixel
-#define PIN_NEOPIXEL   (15u)
+#define PIN_NEOPIXEL   (22u)
 
 // SD Card
 #define PIN_CARD_CS 23
 #define PIN_CARD_DETECT 24
 
-#define TFT_CS 29
-#define TFT_DC 25
-#define TFT_RESET -1
-#define TFT_BACKLIGHT 28
+#define TFT_CS 24
+#define TFT_DC 23
+#define TFT_RESET 0
+#define TFT_BACKLIGHT 37
 
-#define DENSITY_PIN 0 // IDC 2
-#define INDEX_PIN 9   // IDC 8
-#define SELECT_PIN 1  // IDC 12
-#define MOTOR_PIN 2   // IDC 16
-#define DIR_PIN 3     // IDC 18
-#define STEP_PIN 4    // IDC 20
-#define WRDATA_PIN 5  // IDC 22 (not used during read)
-#define WRGATE_PIN 6  // IDC 24 (not used during read)
-#define TRK0_PIN 10   // IDC 26
-#define PROT_PIN 11   // IDC 28
-#define READ_PIN 12   // IDC 30
-#define SIDE_PIN 7    // IDC 32
-#define READY_PIN 13  // IDC 34
+#define DENSITY_PIN 1 // IDC 2
+#define INDEX_PIN 10  // IDC 8
+#define SELECT_PIN 2  // IDC 12
+#define MOTOR_PIN 3   // IDC 16
+#define DIR_PIN 4     // IDC 18
+#define STEP_PIN 5    // IDC 20
+#define WRDATA_PIN 6  // IDC 22 (not used during read)
+#define WRGATE_PIN 7  // IDC 24 (not used during read)
+#define TRK0_PIN 11   // IDC 26
+#define PROT_PIN 12   // IDC 28
+#define READ_PIN 13   // IDC 30
+#define SIDE_PIN 8    // IDC 32
+#define READY_PIN 14  // IDC 34
 
-#define FLOPPY_DIRECTION_PIN 8
+#define FLOPPY_DIRECTION_PIN 9
 
-// Serial
-#define PIN_SERIAL1_TX (24u)
-#define PIN_SERIAL1_RX (21u)
-#define __SERIAL1_DEVICE uart1
+// Not pinned out
+#define PIN_SERIAL1_TX (31u)
+#define PIN_SERIAL1_RX (31u)
 
 // Not pinned out
 #define PIN_SERIAL2_TX (31u)
@@ -63,8 +62,8 @@
 #define PIN_WIRE1_SCL  (31u)
 #define __WIRE1_DEVICE i2c1
 
-#define SERIAL_HOWMANY (2u)
-#define SPI_HOWMANY    (2u)
+#define SERIAL_HOWMANY (0u)
+#define SPI_HOWMANY    (1u)
 #define WIRE_HOWMANY   (1u)
 
 #include "../generic/common.h"
