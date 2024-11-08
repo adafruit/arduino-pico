@@ -30,6 +30,7 @@
 #define READY_PIN 14  // IDC 34
 
 #define FLOPPY_DIRECTION_PIN 9
+#define FLOPPY_ENABLE_PIN 15
 
 // Not pinned out
 #define PIN_SERIAL1_TX (31u)
