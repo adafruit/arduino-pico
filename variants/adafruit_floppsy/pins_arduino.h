@@ -7,13 +7,12 @@
 #define PIN_NEOPIXEL   (22u)
 
 // SD Card
-#define PIN_CARD_CS 23
-#define PIN_CARD_DETECT 24
+#define PIN_CARD_CS 21
 
-#define TFT_CS 24
 #define TFT_DC 23
+#define TFT_CS 24
+#define TFT_BACKLIGHT 25
 #define TFT_RESET 0
-#define TFT_BACKLIGHT 37
 
 #define DENSITY_PIN 1 // IDC 2
 #define INDEX_PIN 10  // IDC 8
@@ -44,14 +43,14 @@
 #define PIN_SPI0_SCK   (18u)
 #define PIN_SPI0_MOSI  (19u)
 #define PIN_SPI0_MISO  (20u)
-#define PIN_SPI0_SS    (23u)
+#define PIN_SPI0_SS    (24u)
 #define __SPI0_DEVICE  spi0
 
 // Not pinned out
 #define PIN_SPI1_MISO  (31u)
-#define PIN_SPI1_MOSI  (27u)
-#define PIN_SPI1_SCK   (26u)
-#define PIN_SPI1_SS    (29u)
+#define PIN_SPI1_MOSI  (31u)
+#define PIN_SPI1_SCK   (31u)
+#define PIN_SPI1_SS    (31u)
 #define __SPI1_DEVICE  spi1
 
 // Wire
