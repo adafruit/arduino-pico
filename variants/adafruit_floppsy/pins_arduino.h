@@ -8,6 +8,7 @@
 
 // SD Card
 #define PIN_CARD_CS 21
+// PIN_CARD_DETECT on IO expander
 
 #define TFT_DC 23
 #define TFT_CS 24
