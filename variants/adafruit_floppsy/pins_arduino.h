@@ -15,6 +15,7 @@
 #define TFT_BACKLIGHT 25
 #define TFT_RESET 0
 
+// pins on the 34-pin header
 #define DENSITY_PIN 1 // IDC 2
 #define INDEX_PIN 10  // IDC 8
 #define SELECT_PIN 2  // IDC 12
@@ -28,6 +29,19 @@
 #define READ_PIN 13   // IDC 30
 #define SIDE_PIN 8    // IDC 32
 #define READY_PIN 14  // IDC 34
+
+// pins for Apple Disk ][ interfacing (20-pin IDC header)
+#define APPLE2_PHASE1_PIN  SIDE_PIN    // IDC 2
+#define APPLE2_PHASE2_PIN  STEP_PIN    // IDC 4
+#define APPLE2_PHASE3_PIN  DIR_PIN     // IDC 6
+#define APPLE2_PHASE4_PIN  MOTOR_PIN   // IDC 8
+#define APPLE2_WRGATE_PIN  WRGATE_PIN  // IDC 10
+#define APPLE2_ENABLE_PIN  DENSITY_PIN // IDC 14
+#define APPLE2_RDDATA_PIN  READ_PIN    // IDC 16
+#define APPLE2_WRDATA_PIN  WRDATA_PIN  // IDC 18
+#define APPLE2_PROTECT_PIN PROT_PIN    // IDC 20
+
+#define APPLE2_INDEX_PIN   (26)          // SENSE 1 JST connector
 
 #define FLOPPY_DIRECTION_PIN 9
 #define FLOPPY_ENABLE_PIN 15
