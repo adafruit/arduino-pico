@@ -31,15 +31,16 @@
 #define READY_PIN 14  // IDC 34
 
 // pins for Apple Disk ][ interfacing (20-pin IDC header)
-#define APPLE2_PHASE1_PIN  SIDE_PIN    // IDC 2
-#define APPLE2_PHASE2_PIN  STEP_PIN    // IDC 4
-#define APPLE2_PHASE3_PIN  DIR_PIN     // IDC 6
-#define APPLE2_PHASE4_PIN  MOTOR_PIN   // IDC 8
-#define APPLE2_WRGATE_PIN  WRGATE_PIN  // IDC 10
-#define APPLE2_ENABLE_PIN  DENSITY_PIN // IDC 14
-#define APPLE2_RDDATA_PIN  READ_PIN    // IDC 16
-#define APPLE2_WRDATA_PIN  WRDATA_PIN  // IDC 18
-#define APPLE2_PROTECT_PIN PROT_PIN    // IDC 20
+#define APPLE2_PHASE1_PIN  SIDE_PIN    // IDC 2 "Phi0"
+#define APPLE2_PHASE2_PIN  STEP_PIN    // IDC 4 "Phi1"
+#define APPLE2_PHASE3_PIN  DIR_PIN     // IDC 6 "Phi2"
+#define APPLE2_PHASE4_PIN  MOTOR_PIN   // IDC 8 "Phi3"
+#define APPLE2_WRGATE_PIN  WRGATE_PIN  // IDC 10 "WR REQ"
+                                       // IDC 12 VCC
+#define APPLE2_ENABLE_PIN  DENSITY_PIN // IDC 14 "DRVEN/"
+#define APPLE2_RDDATA_PIN  READ_PIN    // IDC 16 "RD DATA"
+#define APPLE2_WRDATA_PIN  WRDATA_PIN  // IDC 18 "WR DATA"
+#define APPLE2_PROTECT_PIN PROT_PIN    // IDC 20 "W PROT"
 
 #define APPLE2_INDEX_PIN   (26)          // SENSE 1 JST connector
 
