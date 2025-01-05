@@ -5648,10 +5648,6 @@ adafruit_feather_rp2350_hstx.build.usbvid=-DUSBD_VID=0x239a
 adafruit_feather_rp2350_hstx.build.usbpid=-DUSBD_PID=0x814f
 adafruit_feather_rp2350_hstx.build.usbpwr=-DUSBD_MAX_POWER_MA=250
 adafruit_feather_rp2350_hstx.build.board=ADAFRUIT_FEATHER_RP2350_HSTX
-adafruit_feather_rp2350_hstx.build.chip=rp2350
-adafruit_feather_rp2350_hstx.build.toolchain=arm-none-eabi
-adafruit_feather_rp2350_hstx.build.toolchainopts=-mcpu=cortex-m33 -mthumb -march=armv8-m.main+fp+dsp -mfloat-abi=softfp -mcmse
-adafruit_feather_rp2350_hstx.build.uf2family=--family rp2350-arm-s --abs-block
 adafruit_feather_rp2350_hstx.build.variant=adafruit_feather_rp2350_hstx
 adafruit_feather_rp2350_hstx.upload.maximum_size=8388608
 adafruit_feather_rp2350_hstx.upload.wait_for_upload_port=true
@@ -5750,6 +5746,20 @@ adafruit_feather_rp2350_hstx.menu.flash.8388608_7340032.build.flash_length=10403
 adafruit_feather_rp2350_hstx.menu.flash.8388608_7340032.build.eeprom_start=276815872
 adafruit_feather_rp2350_hstx.menu.flash.8388608_7340032.build.fs_start=269475840
 adafruit_feather_rp2350_hstx.menu.flash.8388608_7340032.build.fs_end=276815872
+adafruit_feather_rp2350_hstx.menu.arch.arm=ARM
+adafruit_feather_rp2350_hstx.menu.arch.arm.build.chip=rp2350
+adafruit_feather_rp2350_hstx.menu.arch.arm.build.toolchain=arm-none-eabi
+adafruit_feather_rp2350_hstx.menu.arch.arm.build.toolchainpkg=pqt-gcc
+adafruit_feather_rp2350_hstx.menu.arch.arm.build.toolchainopts=-mcpu=cortex-m33 -mthumb -march=armv8-m.main+fp+dsp -mfloat-abi=softfp -mcmse
+adafruit_feather_rp2350_hstx.menu.arch.arm.build.uf2family=--family rp2350-arm-s --abs-block
+adafruit_feather_rp2350_hstx.menu.arch.arm.build.mcu=cortex-m33
+adafruit_feather_rp2350_hstx.menu.arch.riscv=RISC-V
+adafruit_feather_rp2350_hstx.menu.arch.riscv.build.chip=rp2350-riscv
+adafruit_feather_rp2350_hstx.menu.arch.riscv.build.toolchain=riscv32-unknown-elf
+adafruit_feather_rp2350_hstx.menu.arch.riscv.build.toolchainpkg=pqt-gcc-riscv
+adafruit_feather_rp2350_hstx.menu.arch.riscv.build.toolchainopts=-march=rv32imac_zicsr_zifencei_zba_zbb_zbs_zbkb -mabi=ilp32
+adafruit_feather_rp2350_hstx.menu.arch.riscv.build.uf2family=--family rp2350-riscv --abs-block
+adafruit_feather_rp2350_hstx.menu.arch.riscv.build.mcu=rv32imac
 adafruit_feather_rp2350_hstx.menu.freq.150=150 MHz
 adafruit_feather_rp2350_hstx.menu.freq.150.build.f_cpu=150000000L
 adafruit_feather_rp2350_hstx.menu.freq.50=50 MHz
@@ -5778,6 +5788,14 @@ adafruit_feather_rp2350_hstx.menu.freq.275=275 MHz (Overclock)
 adafruit_feather_rp2350_hstx.menu.freq.275.build.f_cpu=275000000L
 adafruit_feather_rp2350_hstx.menu.freq.300=300 MHz (Overclock)
 adafruit_feather_rp2350_hstx.menu.freq.300.build.f_cpu=300000000L
+adafruit_feather_rp2350_hstx.menu.psram.0mb=0MByte PSRAM
+adafruit_feather_rp2350_hstx.menu.psram.0mb.build.psram_length=0x000000
+adafruit_feather_rp2350_hstx.menu.psram.2mb=2MByte PSRAM
+adafruit_feather_rp2350_hstx.menu.psram.2mb.build.psram_length=0x200000
+adafruit_feather_rp2350_hstx.menu.psram.4mb=4MByte PSRAM
+adafruit_feather_rp2350_hstx.menu.psram.4mb.build.psram_length=0x400000
+adafruit_feather_rp2350_hstx.menu.psram.8mb=8MByte PSRAM
+adafruit_feather_rp2350_hstx.menu.psram.8mb.build.psram_length=0x800000
 adafruit_feather_rp2350_hstx.menu.opt.Small=Small (-Os) (standard)
 adafruit_feather_rp2350_hstx.menu.opt.Small.build.flags.optimize=-Os
 adafruit_feather_rp2350_hstx.menu.opt.Optimize=Optimize (-O)
@@ -5790,6 +5808,12 @@ adafruit_feather_rp2350_hstx.menu.opt.Fast=Fast (-Ofast) (maybe slower)
 adafruit_feather_rp2350_hstx.menu.opt.Fast.build.flags.optimize=-Ofast
 adafruit_feather_rp2350_hstx.menu.opt.Debug=Debug (-Og)
 adafruit_feather_rp2350_hstx.menu.opt.Debug.build.flags.optimize=-Og
+adafruit_feather_rp2350_hstx.menu.opt.Disabled=Disabled (-O0)
+adafruit_feather_rp2350_hstx.menu.opt.Disabled.build.flags.optimize=-O0
+adafruit_feather_rp2350_hstx.menu.profile.Disabled=Disabled
+adafruit_feather_rp2350_hstx.menu.profile.Disabled.build.flags.profile=
+adafruit_feather_rp2350_hstx.menu.profile.Enabled=Enabled
+adafruit_feather_rp2350_hstx.menu.profile.Enabled.build.flags.profile=-pg -D__PROFILE
 adafruit_feather_rp2350_hstx.menu.rtti.Disabled=Disabled
 adafruit_feather_rp2350_hstx.menu.rtti.Disabled.build.flags.rtti=-fno-rtti
 adafruit_feather_rp2350_hstx.menu.rtti.Enabled=Enabled
@@ -5812,6 +5836,8 @@ adafruit_feather_rp2350_hstx.menu.dbgport.Serial1=Serial1
 adafruit_feather_rp2350_hstx.menu.dbgport.Serial1.build.debug_port=-DDEBUG_RP2040_PORT=Serial1
 adafruit_feather_rp2350_hstx.menu.dbgport.Serial2=Serial2
 adafruit_feather_rp2350_hstx.menu.dbgport.Serial2.build.debug_port=-DDEBUG_RP2040_PORT=Serial2
+adafruit_feather_rp2350_hstx.menu.dbgport.SerialSemi=SerialSemi
+adafruit_feather_rp2350_hstx.menu.dbgport.SerialSemi.build.debug_port=-DDEBUG_RP2040_PORT=SerialSemi
 adafruit_feather_rp2350_hstx.menu.dbglvl.None=None
 adafruit_feather_rp2350_hstx.menu.dbglvl.None.build.debug_level=
 adafruit_feather_rp2350_hstx.menu.dbglvl.Core=Core
@@ -5884,256 +5910,6 @@ adafruit_feather_rp2350_hstx.menu.uploadmethod.picoprobe_cmsis_dap.upload.tool=p
 adafruit_feather_rp2350_hstx.menu.uploadmethod.picoprobe_cmsis_dap.upload.tool.default=picoprobe_cmsis_dap
 
 # -----------------------------------
-# Adafruit Pyrate
-# -----------------------------------
-adafruit_pyrate.name=Adafruit Pyrate
-adafruit_pyrate.vid.0=0x239a
-adafruit_pyrate.pid.0=0x8139
-adafruit_pyrate.vid.1=0x239a
-adafruit_pyrate.pid.1=0xc139
-adafruit_pyrate.upload_port.0.vid=0x239a
-adafruit_pyrate.upload_port.0.pid=0x8139
-adafruit_pyrate.upload_port.1.vid=0x239a
-adafruit_pyrate.upload_port.1.pid=0xc139
-adafruit_pyrate.build.usbvid=-DUSBD_VID=0x239a
-adafruit_pyrate.build.usbpid=-DUSBD_PID=0x8139
-adafruit_pyrate.build.usbpwr=-DUSBD_MAX_POWER_MA=250
-adafruit_pyrate.build.board=ADAFRUIT_PYRATE_RP2040
-adafruit_pyrate.build.chip=rp2040
-adafruit_pyrate.build.toolchain=arm-none-eabi
-adafruit_pyrate.build.toolchainopts=-march=armv6-m -mcpu=cortex-m0plus -mthumb
-adafruit_pyrate.build.uf2family=--family rp2040
-adafruit_pyrate.build.variant=adafruit_pyrate
-adafruit_pyrate.upload.maximum_size=8388608
-adafruit_pyrate.upload.wait_for_upload_port=true
-adafruit_pyrate.upload.erase_cmd=
-adafruit_pyrate.serial.disableDTR=false
-adafruit_pyrate.serial.disableRTS=false
-adafruit_pyrate.build.f_cpu=125000000
-adafruit_pyrate.build.led=
-adafruit_pyrate.build.core=rp2040
-adafruit_pyrate.build.ldscript=memmap_default.ld
-adafruit_pyrate.build.boot2=boot2_w25q080_2_padded_checksum
-adafruit_pyrate.build.usb_manufacturer="Adafruit"
-adafruit_pyrate.build.usb_product="Pyrate"
-adafruit_pyrate.menu.flash.8388608_0=8MB (no FS)
-adafruit_pyrate.menu.flash.8388608_0.upload.maximum_size=8384512
-adafruit_pyrate.menu.flash.8388608_0.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_0.build.flash_length=8384512
-adafruit_pyrate.menu.flash.8388608_0.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_0.build.fs_start=276819968
-adafruit_pyrate.menu.flash.8388608_0.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_65536=8MB (Sketch: 8128KB, FS: 64KB)
-adafruit_pyrate.menu.flash.8388608_65536.upload.maximum_size=8318976
-adafruit_pyrate.menu.flash.8388608_65536.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_65536.build.flash_length=8318976
-adafruit_pyrate.menu.flash.8388608_65536.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_65536.build.fs_start=276754432
-adafruit_pyrate.menu.flash.8388608_65536.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_131072=8MB (Sketch: 8064KB, FS: 128KB)
-adafruit_pyrate.menu.flash.8388608_131072.upload.maximum_size=8253440
-adafruit_pyrate.menu.flash.8388608_131072.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_131072.build.flash_length=8253440
-adafruit_pyrate.menu.flash.8388608_131072.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_131072.build.fs_start=276688896
-adafruit_pyrate.menu.flash.8388608_131072.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_262144=8MB (Sketch: 7936KB, FS: 256KB)
-adafruit_pyrate.menu.flash.8388608_262144.upload.maximum_size=8122368
-adafruit_pyrate.menu.flash.8388608_262144.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_262144.build.flash_length=8122368
-adafruit_pyrate.menu.flash.8388608_262144.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_262144.build.fs_start=276557824
-adafruit_pyrate.menu.flash.8388608_262144.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_524288=8MB (Sketch: 7680KB, FS: 512KB)
-adafruit_pyrate.menu.flash.8388608_524288.upload.maximum_size=7860224
-adafruit_pyrate.menu.flash.8388608_524288.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_524288.build.flash_length=7860224
-adafruit_pyrate.menu.flash.8388608_524288.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_524288.build.fs_start=276295680
-adafruit_pyrate.menu.flash.8388608_524288.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_1048576=8MB (Sketch: 7MB, FS: 1MB)
-adafruit_pyrate.menu.flash.8388608_1048576.upload.maximum_size=7335936
-adafruit_pyrate.menu.flash.8388608_1048576.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_1048576.build.flash_length=7335936
-adafruit_pyrate.menu.flash.8388608_1048576.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_1048576.build.fs_start=275771392
-adafruit_pyrate.menu.flash.8388608_1048576.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_2097152=8MB (Sketch: 6MB, FS: 2MB)
-adafruit_pyrate.menu.flash.8388608_2097152.upload.maximum_size=6287360
-adafruit_pyrate.menu.flash.8388608_2097152.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_2097152.build.flash_length=6287360
-adafruit_pyrate.menu.flash.8388608_2097152.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_2097152.build.fs_start=274722816
-adafruit_pyrate.menu.flash.8388608_2097152.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_3145728=8MB (Sketch: 5MB, FS: 3MB)
-adafruit_pyrate.menu.flash.8388608_3145728.upload.maximum_size=5238784
-adafruit_pyrate.menu.flash.8388608_3145728.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_3145728.build.flash_length=5238784
-adafruit_pyrate.menu.flash.8388608_3145728.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_3145728.build.fs_start=273674240
-adafruit_pyrate.menu.flash.8388608_3145728.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_4194304=8MB (Sketch: 4MB, FS: 4MB)
-adafruit_pyrate.menu.flash.8388608_4194304.upload.maximum_size=4190208
-adafruit_pyrate.menu.flash.8388608_4194304.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_4194304.build.flash_length=4190208
-adafruit_pyrate.menu.flash.8388608_4194304.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_4194304.build.fs_start=272625664
-adafruit_pyrate.menu.flash.8388608_4194304.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_5242880=8MB (Sketch: 3MB, FS: 5MB)
-adafruit_pyrate.menu.flash.8388608_5242880.upload.maximum_size=3141632
-adafruit_pyrate.menu.flash.8388608_5242880.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_5242880.build.flash_length=3141632
-adafruit_pyrate.menu.flash.8388608_5242880.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_5242880.build.fs_start=271577088
-adafruit_pyrate.menu.flash.8388608_5242880.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_6291456=8MB (Sketch: 2MB, FS: 6MB)
-adafruit_pyrate.menu.flash.8388608_6291456.upload.maximum_size=2093056
-adafruit_pyrate.menu.flash.8388608_6291456.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_6291456.build.flash_length=2093056
-adafruit_pyrate.menu.flash.8388608_6291456.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_6291456.build.fs_start=270528512
-adafruit_pyrate.menu.flash.8388608_6291456.build.fs_end=276819968
-adafruit_pyrate.menu.flash.8388608_7340032=8MB (Sketch: 1MB, FS: 7MB)
-adafruit_pyrate.menu.flash.8388608_7340032.upload.maximum_size=1044480
-adafruit_pyrate.menu.flash.8388608_7340032.build.flash_total=8388608
-adafruit_pyrate.menu.flash.8388608_7340032.build.flash_length=1044480
-adafruit_pyrate.menu.flash.8388608_7340032.build.eeprom_start=276819968
-adafruit_pyrate.menu.flash.8388608_7340032.build.fs_start=269479936
-adafruit_pyrate.menu.flash.8388608_7340032.build.fs_end=276819968
-adafruit_pyrate.menu.freq.133=133 MHz
-adafruit_pyrate.menu.freq.133.build.f_cpu=133000000L
-adafruit_pyrate.menu.freq.50=50 MHz
-adafruit_pyrate.menu.freq.50.build.f_cpu=50000000L
-adafruit_pyrate.menu.freq.100=100 MHz
-adafruit_pyrate.menu.freq.100.build.f_cpu=100000000L
-adafruit_pyrate.menu.freq.120=120 MHz
-adafruit_pyrate.menu.freq.120.build.f_cpu=120000000L
-adafruit_pyrate.menu.freq.125=125 MHz
-adafruit_pyrate.menu.freq.125.build.f_cpu=125000000L
-adafruit_pyrate.menu.freq.128=128 MHz
-adafruit_pyrate.menu.freq.128.build.f_cpu=128000000L
-adafruit_pyrate.menu.freq.150=150 MHz (Overclock)
-adafruit_pyrate.menu.freq.150.build.f_cpu=150000000L
-adafruit_pyrate.menu.freq.175=175 MHz (Overclock)
-adafruit_pyrate.menu.freq.175.build.f_cpu=175000000L
-adafruit_pyrate.menu.freq.200=200 MHz (Overclock)
-adafruit_pyrate.menu.freq.200.build.f_cpu=200000000L
-adafruit_pyrate.menu.freq.225=225 MHz (Overclock)
-adafruit_pyrate.menu.freq.225.build.f_cpu=225000000L
-adafruit_pyrate.menu.freq.240=240 MHz (Overclock)
-adafruit_pyrate.menu.freq.240.build.f_cpu=240000000L
-adafruit_pyrate.menu.freq.250=250 MHz (Overclock)
-adafruit_pyrate.menu.freq.250.build.f_cpu=250000000L
-adafruit_pyrate.menu.freq.275=275 MHz (Overclock)
-adafruit_pyrate.menu.freq.275.build.f_cpu=275000000L
-adafruit_pyrate.menu.freq.300=300 MHz (Overclock)
-adafruit_pyrate.menu.freq.300.build.f_cpu=300000000L
-adafruit_pyrate.menu.opt.Small=Small (-Os) (standard)
-adafruit_pyrate.menu.opt.Small.build.flags.optimize=-Os
-adafruit_pyrate.menu.opt.Optimize=Optimize (-O)
-adafruit_pyrate.menu.opt.Optimize.build.flags.optimize=-O
-adafruit_pyrate.menu.opt.Optimize2=Optimize More (-O2)
-adafruit_pyrate.menu.opt.Optimize2.build.flags.optimize=-O2
-adafruit_pyrate.menu.opt.Optimize3=Optimize Even More (-O3)
-adafruit_pyrate.menu.opt.Optimize3.build.flags.optimize=-O3
-adafruit_pyrate.menu.opt.Fast=Fast (-Ofast) (maybe slower)
-adafruit_pyrate.menu.opt.Fast.build.flags.optimize=-Ofast
-adafruit_pyrate.menu.opt.Debug=Debug (-Og)
-adafruit_pyrate.menu.opt.Debug.build.flags.optimize=-Og
-adafruit_pyrate.menu.rtti.Disabled=Disabled
-adafruit_pyrate.menu.rtti.Disabled.build.flags.rtti=-fno-rtti
-adafruit_pyrate.menu.rtti.Enabled=Enabled
-adafruit_pyrate.menu.rtti.Enabled.build.flags.rtti=
-adafruit_pyrate.menu.stackprotect.Disabled=Disabled
-adafruit_pyrate.menu.stackprotect.Disabled.build.flags.stackprotect=
-adafruit_pyrate.menu.stackprotect.Enabled=Enabled
-adafruit_pyrate.menu.stackprotect.Enabled.build.flags.stackprotect=-fstack-protector
-adafruit_pyrate.menu.exceptions.Disabled=Disabled
-adafruit_pyrate.menu.exceptions.Disabled.build.flags.exceptions=-fno-exceptions
-adafruit_pyrate.menu.exceptions.Disabled.build.flags.libstdcpp=-lstdc++
-adafruit_pyrate.menu.exceptions.Enabled=Enabled
-adafruit_pyrate.menu.exceptions.Enabled.build.flags.exceptions=-fexceptions
-adafruit_pyrate.menu.exceptions.Enabled.build.flags.libstdcpp=-lstdc++-exc
-adafruit_pyrate.menu.dbgport.Disabled=Disabled
-adafruit_pyrate.menu.dbgport.Disabled.build.debug_port=
-adafruit_pyrate.menu.dbgport.Serial=Serial
-adafruit_pyrate.menu.dbgport.Serial.build.debug_port=-DDEBUG_RP2040_PORT=Serial
-adafruit_pyrate.menu.dbgport.Serial1=Serial1
-adafruit_pyrate.menu.dbgport.Serial1.build.debug_port=-DDEBUG_RP2040_PORT=Serial1
-adafruit_pyrate.menu.dbgport.Serial2=Serial2
-adafruit_pyrate.menu.dbgport.Serial2.build.debug_port=-DDEBUG_RP2040_PORT=Serial2
-adafruit_pyrate.menu.dbglvl.None=None
-adafruit_pyrate.menu.dbglvl.None.build.debug_level=
-adafruit_pyrate.menu.dbglvl.Core=Core
-adafruit_pyrate.menu.dbglvl.Core.build.debug_level=-DDEBUG_RP2040_CORE
-adafruit_pyrate.menu.dbglvl.SPI=SPI
-adafruit_pyrate.menu.dbglvl.SPI.build.debug_level=-DDEBUG_RP2040_SPI
-adafruit_pyrate.menu.dbglvl.Wire=Wire
-adafruit_pyrate.menu.dbglvl.Wire.build.debug_level=-DDEBUG_RP2040_WIRE
-adafruit_pyrate.menu.dbglvl.Bluetooth=Bluetooth
-adafruit_pyrate.menu.dbglvl.Bluetooth.build.debug_level=-DDEBUG_RP2040_BLUETOOTH
-adafruit_pyrate.menu.dbglvl.All=All
-adafruit_pyrate.menu.dbglvl.All.build.debug_level=-DDEBUG_RP2040_WIRE -DDEBUG_RP2040_SPI -DDEBUG_RP2040_CORE -DDEBUG_RP2040_BLUETOOTH
-adafruit_pyrate.menu.dbglvl.NDEBUG=NDEBUG
-adafruit_pyrate.menu.dbglvl.NDEBUG.build.debug_level=-DNDEBUG
-adafruit_pyrate.menu.usbstack.picosdk=Pico SDK
-adafruit_pyrate.menu.usbstack.picosdk.build.usbstack_flags=
-adafruit_pyrate.menu.usbstack.tinyusb=Adafruit TinyUSB
-adafruit_pyrate.menu.usbstack.tinyusb.build.usbstack_flags=-DUSE_TINYUSB "-I{runtime.platform.path}/libraries/Adafruit_TinyUSB_Arduino/src/arduino"
-adafruit_pyrate.menu.usbstack.tinyusb_host=Adafruit TinyUSB Host (native)
-adafruit_pyrate.menu.usbstack.tinyusb_host.build.usbstack_flags=-DUSE_TINYUSB -DUSE_TINYUSB_HOST "-I{runtime.platform.path}/libraries/Adafruit_TinyUSB_Arduino/src/arduino"
-adafruit_pyrate.menu.usbstack.nousb=No USB
-adafruit_pyrate.menu.usbstack.nousb.build.usbstack_flags="-DNO_USB -DDISABLE_USB_SERIAL -I{runtime.platform.path}/tools/libpico"
-adafruit_pyrate.menu.ipbtstack.ipv4only=IPv4 Only
-adafruit_pyrate.menu.ipbtstack.ipv4only.build.libpicow=libipv4.a
-adafruit_pyrate.menu.ipbtstack.ipv4only.build.libpicowdefs=-DLWIP_IPV6=0 -DLWIP_IPV4=1
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6=IPv4 + IPv6
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6.build.libpicow=libipv4-ipv6.a
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6.build.libpicowdefs=-DLWIP_IPV6=1 -DLWIP_IPV4=1
-adafruit_pyrate.menu.ipbtstack.ipv4btcble=IPv4 + Bluetooth
-adafruit_pyrate.menu.ipbtstack.ipv4btcble.build.libpicow=libipv4-bt.a
-adafruit_pyrate.menu.ipbtstack.ipv4btcble.build.libpicowdefs=-DLWIP_IPV6=0 -DLWIP_IPV4=1 -DENABLE_CLASSIC=1 -DENABLE_BLE=1
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6btcble=IPv4 + IPv6 + Bluetooth
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6btcble.build.libpicow=libipv4-ipv6-bt.a
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6btcble.build.libpicowdefs=-DLWIP_IPV6=1 -DLWIP_IPV4=1 -DENABLE_CLASSIC=1 -DENABLE_BLE=1
-adafruit_pyrate.menu.ipbtstack.ipv4onlybig=IPv4 Only - 32K
-adafruit_pyrate.menu.ipbtstack.ipv4onlybig.build.libpicow=libipv4-big.a
-adafruit_pyrate.menu.ipbtstack.ipv4onlybig.build.libpicowdefs=-DLWIP_IPV6=0 -DLWIP_IPV4=1 -D__LWIP_MEMMULT=2
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6big=IPv4 + IPv6 - 32K
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6big.build.libpicow=libipv4-ipv6-big.a
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6big.build.libpicowdefs=-DLWIP_IPV6=1 -DLWIP_IPV4=1 -D__LWIP_MEMMULT=2
-adafruit_pyrate.menu.ipbtstack.ipv4btcblebig=IPv4 + Bluetooth - 32K
-adafruit_pyrate.menu.ipbtstack.ipv4btcblebig.build.libpicow=libipv4-bt-big.a
-adafruit_pyrate.menu.ipbtstack.ipv4btcblebig.build.libpicowdefs=-DLWIP_IPV6=0 -DLWIP_IPV4=1 -DENABLE_CLASSIC=1 -DENABLE_BLE=1 -D__LWIP_MEMMULT=2
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6btcblebig=IPv4 + IPv6 + Bluetooth - 32K
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6btcblebig.build.libpicow=libipv4-ipv6-bt-big.a
-adafruit_pyrate.menu.ipbtstack.ipv4ipv6btcblebig.build.libpicowdefs=-DLWIP_IPV6=1 -DLWIP_IPV4=1 -DENABLE_CLASSIC=1 -DENABLE_BLE=1 -D__LWIP_MEMMULT=2
-adafruit_pyrate.menu.boot2.boot2_w25q080_2_padded_checksum=W25Q080 QSPI /2
-adafruit_pyrate.menu.boot2.boot2_w25q080_2_padded_checksum.build.boot2=boot2_w25q080_2_padded_checksum
-adafruit_pyrate.menu.boot2.boot2_w25q080_4_padded_checksum=W25Q080 QSPI /4
-adafruit_pyrate.menu.boot2.boot2_w25q080_4_padded_checksum.build.boot2=boot2_w25q080_4_padded_checksum
-adafruit_pyrate.menu.uploadmethod.default=Default (UF2)
-adafruit_pyrate.menu.uploadmethod.default.build.ram_length=256k
-adafruit_pyrate.menu.uploadmethod.default.build.debugscript=picoprobe_cmsis_dap.tcl
-adafruit_pyrate.menu.uploadmethod.default.upload.maximum_data_size=262144
-adafruit_pyrate.menu.uploadmethod.default.upload.tool=uf2conv
-adafruit_pyrate.menu.uploadmethod.default.upload.tool.default=uf2conv
-adafruit_pyrate.menu.uploadmethod.default.upload.tool.network=uf2conv-network
-adafruit_pyrate.menu.uploadmethod.picotool=Picotool
-adafruit_pyrate.menu.uploadmethod.picotool.build.ram_length=256k
-adafruit_pyrate.menu.uploadmethod.picotool.build.debugscript=picoprobe.tcl
-adafruit_pyrate.menu.uploadmethod.picotool.build.picodebugflags=-DENABLE_PICOTOOL_USB
-adafruit_pyrate.menu.uploadmethod.picotool.upload.maximum_data_size=262144
-adafruit_pyrate.menu.uploadmethod.picotool.upload.tool=picotool
-adafruit_pyrate.menu.uploadmethod.picotool.upload.tool.default=picotool
-adafruit_pyrate.menu.uploadmethod.picoprobe_cmsis_dap=Picoprobe/Debugprobe (CMSIS-DAP)
-adafruit_pyrate.menu.uploadmethod.picoprobe_cmsis_dap.build.ram_length=256k
-adafruit_pyrate.menu.uploadmethod.picoprobe_cmsis_dap.build.debugscript=picoprobe_cmsis_dap.tcl
-adafruit_pyrate.menu.uploadmethod.picoprobe_cmsis_dap.upload.maximum_data_size=262144
-adafruit_pyrate.menu.uploadmethod.picoprobe_cmsis_dap.upload.tool=picoprobe_cmsis_dap
-adafruit_pyrate.menu.uploadmethod.picoprobe_cmsis_dap.upload.tool.default=picoprobe_cmsis_dap
-
-# -----------------------------------
 # Adafruit Floppsy
 # -----------------------------------
 adafruit_floppsy.name=Adafruit Floppsy
@@ -6149,8 +5925,10 @@ adafruit_floppsy.build.usbvid=-DUSBD_VID=0x239a
 adafruit_floppsy.build.usbpid=-DUSBD_PID=0x8151
 adafruit_floppsy.build.usbpwr=-DUSBD_MAX_POWER_MA=250
 adafruit_floppsy.build.board=ADAFRUIT_FLOPPSY_RP2040
+adafruit_floppsy.build.mcu=cortex-m0plus
 adafruit_floppsy.build.chip=rp2040
 adafruit_floppsy.build.toolchain=arm-none-eabi
+adafruit_floppsy.build.toolchainpkg=pqt-gcc
 adafruit_floppsy.build.toolchainopts=-march=armv6-m -mcpu=cortex-m0plus -mthumb
 adafruit_floppsy.build.uf2family=--family rp2040
 adafruit_floppsy.build.variant=adafruit_floppsy
@@ -6346,6 +6124,12 @@ adafruit_floppsy.menu.opt.Fast=Fast (-Ofast) (maybe slower)
 adafruit_floppsy.menu.opt.Fast.build.flags.optimize=-Ofast
 adafruit_floppsy.menu.opt.Debug=Debug (-Og)
 adafruit_floppsy.menu.opt.Debug.build.flags.optimize=-Og
+adafruit_floppsy.menu.opt.Disabled=Disabled (-O0)
+adafruit_floppsy.menu.opt.Disabled.build.flags.optimize=-O0
+adafruit_floppsy.menu.profile.Disabled=Disabled
+adafruit_floppsy.menu.profile.Disabled.build.flags.profile=
+adafruit_floppsy.menu.profile.Enabled=Enabled
+adafruit_floppsy.menu.profile.Enabled.build.flags.profile=-pg -D__PROFILE
 adafruit_floppsy.menu.rtti.Disabled=Disabled
 adafruit_floppsy.menu.rtti.Disabled.build.flags.rtti=-fno-rtti
 adafruit_floppsy.menu.rtti.Enabled=Enabled
@@ -6368,6 +6152,8 @@ adafruit_floppsy.menu.dbgport.Serial1=Serial1
 adafruit_floppsy.menu.dbgport.Serial1.build.debug_port=-DDEBUG_RP2040_PORT=Serial1
 adafruit_floppsy.menu.dbgport.Serial2=Serial2
 adafruit_floppsy.menu.dbgport.Serial2.build.debug_port=-DDEBUG_RP2040_PORT=Serial2
+adafruit_floppsy.menu.dbgport.SerialSemi=SerialSemi
+adafruit_floppsy.menu.dbgport.SerialSemi.build.debug_port=-DDEBUG_RP2040_PORT=SerialSemi
 adafruit_floppsy.menu.dbglvl.None=None
 adafruit_floppsy.menu.dbglvl.None.build.debug_level=
 adafruit_floppsy.menu.dbglvl.Core=Core
