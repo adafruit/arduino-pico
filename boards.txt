@@ -6009,7 +6009,6 @@ adafruit_feather_rp2350_adalogger.menu.uploadmethod.picoprobe_cmsis_dap.upload.m
 adafruit_feather_rp2350_adalogger.menu.uploadmethod.picoprobe_cmsis_dap.upload.tool=picoprobe_cmsis_dap
 adafruit_feather_rp2350_adalogger.menu.uploadmethod.picoprobe_cmsis_dap.upload.tool.default=picoprobe_cmsis_dap
 
-
 # -----------------------------------
 # Adafruit Feather RP2350 HSTX
 # -----------------------------------
