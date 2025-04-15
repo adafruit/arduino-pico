@@ -20,6 +20,8 @@
 // UARTs
 #define PIN_SERIAL1_TX (0u)
 #define PIN_SERIAL1_RX (1u)
+#define PIN_SERIAL2_TX (99u) // not pinned out
+#define PIN_SERIAL2_RX (99u)
 
 // SPI
 #define PIN_SPI0_MISO  (20u)
