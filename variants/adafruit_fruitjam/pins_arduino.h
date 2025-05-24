@@ -8,9 +8,9 @@
 #define NUM_NEOPIXEL   (5u)
 
 // 'Boot0' button also on GPIO #0
-#define PIN_BUTTON      (0u)
-#define PIN_BUTTON1     (4u)
-#define PIN_BUTTON2     (5u)
+#define PIN_BUTTON1     (0u)
+#define PIN_BUTTON2     (4u)
+#define PIN_BUTTON3     (5u)
 
 // USB host connector
 #define PIN_USB_HOST_DP (1u)
