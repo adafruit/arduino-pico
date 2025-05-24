@@ -85,7 +85,7 @@ def BuildPSRAMFreq(name):
         print("%s.menu.psramfreq.freq%d.build.psram_freq=-DRP2350_PSRAM_MAX_SCK_HZ=%d" % (name, s, s * 1000000))
 
 def BuildRP2350Variant(name):
-    for l in [ ("RP2350A", "-DPICO_RP2350A=1"), ("RP2530B", "-DPICO_RP2350B=1") ]:
+    for l in [ ("RP2350A", "-D__PICO_RP2350A=1"), ("RP2530B", "-D__PICO_RP2350A=0") ]:
         print("%s.menu.variantchip.%s=%s" % (name, l[0], l[0]))
         print("%s.menu.variantchip.%s.build.variantdefines=%s" % (name, l[0], l[1]))
 
@@ -112,7 +112,7 @@ def BuildStackProtect(name):
     print("%s.menu.stackprotect.Disabled=Disabled" % (name))
     print("%s.menu.stackprotect.Disabled.build.flags.stackprotect=" % (name))
     print("%s.menu.stackprotect.Enabled=Enabled" % (name))
-    print("%s.menu.stackprotect.Enabled.build.flags.stackprotect=-fstack-protector" % (name))
+    print("%s.menu.stackprotect.Enabled.build.flags.stackprotect=-fstack-protector-all" % (name))
 
 def BuildExceptions(name):
     print("%s.menu.exceptions.Disabled=Disabled" % (name))
@@ -364,7 +364,7 @@ def MakeBoard(name, chip, vendor_name, product_name, vid, pid, pwr, boarddefine,
             # Optional, user needs to solder themselves
             BuildPSRAM(name)
             BuildPSRAMFreq(name)
-        elif name == "adafruit_feather_rp2350_hstx":
+        elif (name == "adafruit_feather_rp2350_hstx") or (name == "adafruit_metro_rp2350"):
             # Optional, user needs to solder themselves
             BuildPSRAM(name)
     else:
@@ -519,10 +519,11 @@ MakeBoard("adafruit_stemmafriend", "rp2040", "Adafruit", "STEMMA Friend RP2040",
 MakeBoard("adafruit_trinkeyrp2040qt", "rp2040", "Adafruit", "Trinkey RP2040 QT", "0x239a", "0x8109", 250, "ADAFRUIT_TRINKEYQT_RP2040", 8, 0, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_macropad2040", "rp2040", "Adafruit", "MacroPad RP2040", "0x239a", "0x8107", 250, "ADAFRUIT_MACROPAD_RP2040", 8, 0, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_kb2040", "rp2040", "Adafruit", "KB2040", "0x239a", "0x8105", 250, "ADAFRUIT_KB2040_RP2040", 8, 0, "boot2_w25q080_2_padded_checksum")
+MakeBoard("adafruit_feather_rp2350_adalogger", "rp2350", "Adafruit", "Feather RP2350 Adalogger", "0x239a", "0x816D", 250, "ADAFRUIT_FEATHER_RP2350_ADALOGGER", 8, 0, "none")
 MakeBoard("adafruit_feather_rp2350_hstx", "rp2350", "Adafruit", "Feather RP2350 HSTX", "0x239a", "0x814f", 250, "ADAFRUIT_FEATHER_RP2350_HSTX", 8, 0, "none")
 MakeBoard("adafruit_floppsy", "rp2040", "Adafruit", "Floppsy", "0x239a", "0x8151", 250, "ADAFRUIT_FLOPPSY_RP2040", 16, 0, "boot2_w25q080_2_padded_checksum")
 MakeBoard("adafruit_metro_rp2350", "rp2350", "Adafruit", "Metro RP2350", "0x239a", "0x814d", 250, "ADAFRUIT_METRO_RP2350", 16, 0, "none")
-MakeBoard("adafruit_fruitjam", "rp2350", "Adafruit", "Fruit Jam RP2350", "0x239a", "0x816B", 250, "ADAFRUIT_FRUITJAM_RP2350", 16, 0, "none")
+MakeBoard("adafruit_fruitjam", "rp2350", "Adafruit", "Fruit Jam RP2350", "0x239a", "0x816B", 250, "ADAFRUIT_FRUITJAM_RP2350", 16, 8, "none")
 # Amken
 MakeBoard("amken_bunny", "rp2040","Amken","BunnyBoard","0x2770",["0x7303"],250,"AMKEN_BB",128,0,"boot2_w25q128jvxq_4_padded_checksum","","https://www.amken3d.com")
 MakeBoard("amken_revelop", "rp2040","Amken","Revelop","0x2770",["0x7304"],250,"AMKEN_REVELOP",32,0,"boot2_W25Q32JVxQ_4_padded_checksum","","https://www.amken3d.com")
