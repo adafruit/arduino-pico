@@ -32,8 +32,18 @@
 #define PIN_I2S_WORDSEL  (25u)
 #define PIN_I2S_BITCLK   (26u)
 #define PIN_I2S_MCLK     (27u)
+#define PIN_I2S_IRQ      (23u)
+
 
 #define PIN_PERIPHERAL_RESET (22u)
+
+
+#define SerialESP32     Serial2 // Shared with buttons!
+#define SPIWIFI         SPI1
+#define SPIWIFI_SS      46      // Chip select pin
+#define SPIWIFI_ACK     3       // a.k.a BUSY or READY pin
+#define ESP32_RESETN    PIN_PERIPHERAL_RESET  // Reset pin
+#define ESP32_GPIO0     PIN_I2S_IRQ
 
 #define __PIN_A0        (40u)
 #define __PIN_A1        (41u)
@@ -45,21 +55,21 @@
 // UARTs
 #define PIN_SERIAL1_TX (8u)
 #define PIN_SERIAL1_RX (9u)
-#define PIN_SERIAL2_TX (99u) // not pinned out
-#define PIN_SERIAL2_RX (99u)
+#define PIN_SERIAL2_TX (4u) // shared with button2
+#define PIN_SERIAL2_RX (5u) // shared with button3
 
 // SPI
-#define __SPI1_DEVICE   spi1
-#define PIN_SPI1_MISO  (28u)
-#define PIN_SPI1_MOSI  (31u)
-#define PIN_SPI1_SCK   (30u)
-#define PIN_SPI1_SS    (46u)
-
 #define __SPI0_DEVICE   spi0
 #define PIN_SPI0_MISO  (36u)
 #define PIN_SPI0_MOSI  (35u)
 #define PIN_SPI0_SCK   (34u)
 #define PIN_SPI0_SS    (39u)
+
+#define __SPI1_DEVICE   spi1
+#define PIN_SPI1_MISO  (28u)
+#define PIN_SPI1_MOSI  (31u)
+#define PIN_SPI1_SCK   (30u)
+#define PIN_SPI1_SS    (46u)
 
 // Wire
 #define __WIRE0_DEVICE i2c0
@@ -70,7 +80,7 @@
 #define PIN_WIRE1_SDA  (99u) // not pinned out
 #define PIN_WIRE1_SCL  (99u)
 
-#define SERIAL_HOWMANY (1u)
+#define SERIAL_HOWMANY (2u)
 #define SPI_HOWMANY    (2u)
 #define WIRE_HOWMANY   (1u)
 
