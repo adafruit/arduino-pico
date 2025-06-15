@@ -38,7 +38,7 @@
 #define PIN_PERIPHERAL_RESET (22u)
 
 
-#define SerialESP32     Serial2 // Shared with buttons!
+#define SerialESP32     Serial1
 #define SPIWIFI         SPI1
 #define SPIWIFI_SS      46      // Chip select pin
 #define SPIWIFI_ACK     3       // a.k.a BUSY or READY pin
@@ -53,10 +53,11 @@
 #define __PIN_A5        (45u)
 
 // UARTs
+#define __SERIAL1_DEVICE uart1
 #define PIN_SERIAL1_TX (8u)
 #define PIN_SERIAL1_RX (9u)
-#define PIN_SERIAL2_TX (4u) // shared with button2
-#define PIN_SERIAL2_RX (5u) // shared with button3
+#define PIN_SERIAL2_TX (99u)
+#define PIN_SERIAL2_RX (99u)
 
 // SPI
 #define __SPI0_DEVICE   spi0
@@ -80,7 +81,7 @@
 #define PIN_WIRE1_SDA  (99u) // not pinned out
 #define PIN_WIRE1_SCL  (99u)
 
-#define SERIAL_HOWMANY (2u)
+#define SERIAL_HOWMANY (1u)
 #define SPI_HOWMANY    (2u)
 #define WIRE_HOWMANY   (1u)
 
