@@ -123,6 +123,9 @@
                      "name": "ArtronShop RP2 Nano"
                   },
                   {
+                     "name": "BIGTREETECH SKR-Pico"
+                  },
+                  {
                      "name": "Breadstick Raspberry"
                   },
                   {
@@ -172,6 +175,9 @@
                   },
                   {
                      "name": "ExtremeElectronics RC2040"
+                  },
+                  {
+                     "name": "GeeekPi RP2040 Plus"
                   },
                   {
                      "name": "GroundStudio Marble Pico"
@@ -237,6 +243,9 @@
                      "name": "MyMakers RP2040"
                   },
                   {
+                     "name": "MyMakers RP2350B"
+                  },
+                  {
                      "name": "Neko Systems BL2040 Mini"
                   },
                   {
@@ -244,6 +253,9 @@
                   },
                   {
                      "name": "nullbits Bit-C PRO"
+                  },
+                  {
+                     "name": "Olimex Pico2BB48"
                   },
                   {
                      "name": "Olimex Pico2XL"
@@ -273,6 +285,9 @@
                      "name": "Pimoroni Plasma2350"
                   },
                   {
+                     "name": "Pimoroni Plasma2350W"
+                  },
+                  {
                      "name": "Pimoroni Servo2040"
                   },
                   {
@@ -280,6 +295,9 @@
                   },
                   {
                      "name": "Pimoroni Tiny2350"
+                  },
+                  {
+                     "name": "Pimoroni Explorer"
                   },
                   {
                      "name": "Pintronix PinMax"
@@ -307,6 +325,9 @@
                   },
                   {
                      "name": "Solder Party RP2350 Stamp XL"
+                  },
+                  {
+                     "name": "Soldered Electronics NULA RP2350"
                   },
                   {
                      "name": "SparkFun IoT RedBoard RP2350"
@@ -351,6 +372,9 @@
                      "name": "VCC-GND YD RP2040"
                   },
                   {
+                     "name": "Vicharak Shrike-Lite"
+                  },
+                  {
                      "name": "Viyalab Mizu RP2040"
                   },
                   {
@@ -360,22 +384,37 @@
                      "name": "Waveshare RP2040 One"
                   },
                   {
+                     "name": "Waveshare RP2040 LoRa"
+                  },
+                  {
                      "name": "Waveshare RP2040 Matrix"
                   },
                   {
                      "name": "Waveshare RP2040 PiZero"
                   },
                   {
-                     "name": "Waveshare RP2040 Plus 4MB"
-                  },
-                  {
-                     "name": "Waveshare RP2040 Plus 16MB"
+                     "name": "Waveshare RP2040 Plus"
                   },
                   {
                      "name": "Waveshare RP2040 LCD 0.96"
                   },
                   {
                      "name": "Waveshare RP2040 LCD 1.28"
+                  },
+                  {
+                     "name": "Waveshare RP2350 Zero"
+                  },
+                  {
+                     "name": "Waveshare RP2350 PiZero"
+                  },
+                  {
+                     "name": "Waveshare RP2350 Plus"
+                  },
+                  {
+                     "name": "Waveshare RP2350B Plus W"
+                  },
+                  {
+                     "name": "Waveshare RP2350 LCD 0.96"
                   },
                   {
                      "name": "WIZnet W5100S-EVB-Pico"
@@ -394,6 +433,12 @@
                   },
                   {
                      "name": "WIZnet W55RP20-EVB-Pico"
+                  },
+                  {
+                     "name": "WIZnet W6300-EVB-Pico"
+                  },
+                  {
+                     "name": "WIZnet W6300-EVB-Pico2"
                   },
                   {
                      "name": "Generic RP2040"

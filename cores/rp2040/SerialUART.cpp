@@ -182,7 +182,7 @@ static void _uart1IRQ();
 // Does the selected TX/RX need UART_AUX function (rp2350)
 static gpio_function_t __gpioFunction(int pin) {
     switch (pin) {
-#if defined(PICO_RP2350) && !PICO_RP2350A
+#if defined(PICO_RP2350)
     case 2:
     case 3:
     case 6:
@@ -239,7 +239,7 @@ void SerialUART::begin(unsigned long baud, uint16_t config) {
         gpio_set_inover(_cts, _invertControl ? 1 : 0);
     }
 
-    uart_init(_uart, baud);
+    _actualBaud = uart_init(_uart, baud);
     int bits, stop;
     uart_parity_t parity;
     switch (config & SERIAL_PARITY_MASK) {

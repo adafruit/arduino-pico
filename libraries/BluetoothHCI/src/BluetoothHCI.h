@@ -28,6 +28,8 @@
 #include "BluetoothDevice.h"
 #include <btstack.h>
 
+#include <vector>
+
 
 class BluetoothHCI {
 public:
@@ -46,6 +48,10 @@ public:
     std::vector<BTDeviceInfo> scanBLE(uint32_t uuid, int scanTimeSec = 5);
 
     void scanFree(); // Free allocated scan buffers
+
+    bool connected() {
+        return _hciConn != HCI_CON_HANDLE_INVALID;
+    }
 
     friend class BluetoothHIDMaster;
 

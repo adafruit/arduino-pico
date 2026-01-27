@@ -86,22 +86,12 @@ extern "C" void __wrap_cyw43_cb_tcpip_set_link_down(cyw43_t *self, int itf) {
     self->wifi_join_state &= ~WIFI_JOIN_STATE_ACTIVE;
 }
 
-extern "C" int __wrap_cyw43_tcpip_link_status(cyw43_t *self, int itf) {
-    struct netif *netif = __getCYW43Netif();
-    //if ((CYW43::_netif->flags & (NETIF_FLAG_UP | NETIF_FLAG_LINK_UP)) == (NETIF_FLAG_UP | NETIF_FLAG_LINK_UP))
-    //  Fake this since it's only used in the SDK
-    if (netif && ((netif->flags & (NETIF_FLAG_LINK_UP)) == (NETIF_FLAG_LINK_UP))) {
-        return CYW43_LINK_UP;
-    } else {
-        return cyw43_wifi_link_status(self, itf);
-    }
-}
-
 // CBs from the SDK, not needed here as we do TCP later in the game
 extern "C" void __wrap_cyw43_cb_tcpip_init(cyw43_t *self, int itf) {
     (void) self;
     (void) itf;
 }
+
 extern "C" void __wrap_cyw43_cb_tcpip_deinit(cyw43_t *self, int itf) {
     (void) self;
     (void) itf;
@@ -159,11 +149,19 @@ extern "C" void init_cyw43_wifi() {
 }
 
 extern "C" void __lockBluetooth() {
+#ifdef __FREERTOS
+    cyw43_thread_enter();
+#else
     async_context_acquire_lock_blocking(cyw43_arch_async_context());
+#endif
 }
 
 extern "C" void __unlockBluetooth() {
+#ifdef __FREERTOS
+    cyw43_thread_exit();
+#else
     async_context_release_lock(cyw43_arch_async_context());
+#endif
 }
 
 extern "C" void __pinMode(pin_size_t pin, PinMode mode);
@@ -171,9 +169,11 @@ extern "C" void __digitalWrite(pin_size_t pin, PinStatus val);
 extern "C" PinStatus __digitalRead(pin_size_t pin);
 
 extern "C" void cyw43_pinMode(pin_size_t pin, PinMode mode) {
+#if defined PIN_LED
     if (!__isPicoW && (pin == PIN_LED)) {
         pin = 25;  // Silently swap in the Pico's LED
     }
+#endif
     if (pin < 64) {
         __pinMode(pin, mode);
     } else {
@@ -182,9 +182,11 @@ extern "C" void cyw43_pinMode(pin_size_t pin, PinMode mode) {
 }
 
 extern "C" void cyw43_digitalWrite(pin_size_t pin, PinStatus val) {
+#if defined PIN_LED
     if (!__isPicoW && (pin == PIN_LED)) {
         pin = 25;  // Silently swap in the Pico's LED
     }
+#endif
     if (pin < 64) {
         __digitalWrite(pin, val);
     } else {
@@ -193,9 +195,11 @@ extern "C" void cyw43_digitalWrite(pin_size_t pin, PinStatus val) {
 }
 
 extern "C" PinStatus cyw43_digitalRead(pin_size_t pin) {
+#ifdef PIN_LED
     if (!__isPicoW && (pin == PIN_LED)) {
         pin = 25;  // Silently swap in the Pico's LED
     }
+#endif
     if (pin < 64) {
         return __digitalRead(pin);
     } else {

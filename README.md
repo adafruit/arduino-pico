@@ -4,7 +4,7 @@
 
 Raspberry Pi Pico Arduino core, for all RP2040 and RP2350 boards
 
-This is a port of Arduino to the RP2040 (Raspberry Pi Pico processor) and RP2350 (Raspberry Pi Pico 2 processor). It uses the bare Raspberry Pi Pico SDK and a custom GCC 14.2/Newlib 4.3 toolchain and supports ARM and RISC-V cores.
+This is a port of Arduino to the RP2040 (Raspberry Pi Pico processor) and RP2350 (Raspberry Pi Pico 2 processor). It uses the bare Raspberry Pi Pico SDK and a custom GCC 14.3/Newlib 4.5 toolchain and supports ARM and RISC-V cores.
 
 # Documentation
 See https://arduino-pico.readthedocs.io/en/latest/ along with the examples for more detailed usage information.
@@ -37,6 +37,7 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * Architeuthis Flux Jumperless V5
 * Arduino Nano RP2040 Connect
 * ArtronShop RP2 Nano
+* BIGTREETECH SKR-Pico
 * Breadstick Raspberry
 * BridgeTek IDM2040-7A
 * BridgeTek IDM2040-43A
@@ -53,6 +54,7 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * ElectronicCats Hunter Cat NFC
 * EVN Alpha
 * ExtremeElectronics RC2040
+* GeeekPi RP2040 Plus
 * GroundStudio Marble Pico
 * Invector Labs Challenger RP2040 WiFi
 * Invector Labs Challenger RP2040 WiFi/BLE
@@ -83,6 +85,7 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * Pimoroni Pico Plus 2W
 * Pimoroni Plasma2040
 * Pimoroni Plasma2350
+* Pimoroni Plasma2350W
 * Pimoroni Servo2040
 * Pimoroni Tiny2040
 * Pimoroni Tiny2350
@@ -98,6 +101,7 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * Solder Party RP2040 Stamp
 * Solder Party RP2350 Stamp
 * Solder Party RP2350 Stamp XL
+* Soldered Electronics NULA RP2350
 * SparkFun IoT RedBoard RP2350
 * SparkFun MicroMod RP2040
 * SparkFun ProMicro RP2040
@@ -113,13 +117,21 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * Waveshare RP2040 Plus
 * Waveshare RP2040 LCD 0.96
 * Waveshare RP2040 LCD 1.28
+* Waveshare RP2040 LoRa
 * Waveshare RP2040 Matrix
 * Waveshare RP2040 PiZero
+* Waveshare RP2350 Zero
+* Waveshare RP2350 PiZero
+* Waveshare RP2350 Plus
+* Waveshare RP2350 Plus W
+* Waveshare RP2350 LCD 0.96
 * WIZnet W5100S-EVB-Pico
 * WIZnet W5100S-EVB-Pico2
 * WIZnet W5500-EVB-Pico
 * WIZnet W5500-EVB-Pico2
 * WIZnet W55RP20-EVB-Pico
+* WIZnet W6300-EVB-Pico
+* WIZnet W6300-EVB-Pico2
 * WIZnet WizFi360-EVB-Pico
 * Generic RP2040 (configurable flash, I/O pins)
 * Generic RP2350 (configurable flash, I/O pins)
@@ -130,7 +142,7 @@ Read the [Contributing Guide](https://github.com/earlephilhower/arduino-pico/blo
 * Bluetooth Classic and BLE HID master mode (connect to BT keyboard, mouse, or joystick)
 * Generic Arduino USB Serial, Keyboard, Joystick, and Mouse emulation
 * WiFi (Pico W, ESP32-based ESPHost, Atmel WINC1500)
-* Ethernet (Wired WizNet W6100, WizNet W5500, WizNet W5100, ENC28J60)
+* Ethernet (Wired WizNet W6300, WizNet W6100, WizNet W5500, WizNet W5100, ENC28J60)
 * HTTP client and server (WebServer)
 * SSL/TLS/HTTPS
 * Over-the-Air (OTA) upgrades
