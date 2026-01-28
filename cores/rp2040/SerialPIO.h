@@ -24,6 +24,7 @@
 #include "api/HardwareSerial.h"
 #include <hardware/uart.h>
 #include "CoreMutex.h"
+#include "LocklessQueue.h"
 
 extern "C" typedef struct uart_inst uart_inst_t;
 
@@ -90,11 +91,10 @@ protected:
     int _rxSM;
     int _rxBits;
 
-    // Lockless, IRQ-handled circular queue
+    LocklessQueue<uint8_t> *_queue;
     size_t   _fifoSize;
-    uint32_t _writer;
-    uint32_t _reader;
-    uint8_t  *_queue;
+
+    uint _onCore;
 };
 
 #ifdef ARDUINO_NANO_RP2040_CONNECT
